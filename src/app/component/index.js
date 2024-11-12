@@ -1,7 +1,10 @@
 import Inputan from "./Inputan"
+import MainAuthLayout from "./MainAuthLayout"
+import MainNonAuthLayout from "./MainNonAuthLayout"
 
-Inputan
 
 export {
+    MainNonAuthLayout,
+    MainAuthLayout,
     Inputan
 }

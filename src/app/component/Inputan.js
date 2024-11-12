@@ -1,51 +1,33 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { EditorState, ContentState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import EditorConvertToHTML from './EditorConvertToHTML';  // Ensure correct import path
 
-export default function Inputan({ values = [], url, backUrl}) {
+export default function Inputan({ values = [], url, backUrl }) {
     const [formData, setFormData] = useState({});
-    const [editorStates, setEditorStates] = useState({}); // Store editor states for each input field
 
     useEffect(() => {
-        if (values.length > 0) {
+        let isMounted = true;
+        
+        if (values.length > 0 && isMounted) {
             const initialData = values.reduce((acc, val) => ({
                 ...acc,
                 [val.name]: ''
             }), {});
             setFormData(initialData);
-
-            // Initialize editorState for each field with `tipe === 1`
-            const initialEditorStates = values.reduce((acc, val) => {
-                if (val.tipe === 1) {
-                    // Set initial content for the editor
-                    acc[val.name] = EditorState.createWithContent(ContentState.createFromText(''));
-                }
-                return acc;
-            }, {});
-            setEditorStates(initialEditorStates);
         }
+    
+        return () => {
+            isMounted = false;
+        };
     }, [values]);
+    
 
-    const handleChange = (name, value) => {
+    const handleChange = (name, value, isMulti = false) => {
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value
+            [name]: isMulti ? [...value] : value, // Ensure value is an array if `multiple` is true
         }));
-    };
-
-    const onEditorStateChange = (name, newEditorState) => {
-        setEditorStates((prevState) => ({
-            ...prevState,
-            [name]: newEditorState
-        }));
-
-        // Optionally, you can store the content as HTML or plain text in formData
-        const currentContent = newEditorState.getCurrentContent();
-        const contentText = currentContent.getPlainText();
-        handleChange(name, contentText); // Saving the plain text to formData
     };
 
     const handleSubmit = async (e) => {
@@ -59,26 +41,32 @@ export default function Inputan({ values = [], url, backUrl}) {
                 values.map((val, key) => (
                     <div key={key} className="form-group row mb-3">
                         <label className="label-form-col col-md-4">
+                            <div className='bg-dark text-light p-1'>
                             {val.title.toUpperCase()}
+                            </div>
                         </label>
                         <div className="col-md-8">
                             {val.tipe === 1 ? (
-                                <Editor
-                                    editorState={editorStates[val.name]}
-                                    toolbarClassName="toolbarClassName"
-                                    wrapperClassName="wrapperClassName"
-                                    editorClassName="editorClassName"
-                                    onEditorStateChange={(newEditorState) =>
-                                        onEditorStateChange(val.name, newEditorState)
-                                    }
+                                <EditorConvertToHTML
+                                    name={val.name}
+                                    content={formData[val.name] || null}  // Pass initial content if any
+                                    onContentChange={(name, content) => handleChange(name, content)}
                                 />
                             ) : val.tipe === 2 ? (
                                 <select
                                     className="form-control"
                                     multiple={val.isMulti}
                                     name={val.name}
-                                    onChange={(e) => handleChange(val.name, e.target.value)}
-                                    value={[formData[val.name]]}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            val.name,
+                                            val.isMulti
+                                                ? Array.from(e.target.selectedOptions, option => option.value) // Convert to array if multiple
+                                                : e.target.value,
+                                            val.isMulti
+                                        )
+                                    }
+                                    value={val.isMulti ? formData[val.name] || [] : formData[val.name] || ''} // Ensure array for multiple
                                 >
                                     {val.element.map((valx, keyx) => (
                                         <option key={keyx} value={valx.id}>{valx.name}</option>
@@ -118,7 +106,7 @@ export default function Inputan({ values = [], url, backUrl}) {
             )}
             <div className='row mb-4'>
               <div className='col-md-12 text-end'>
-                <Link className='btn btn-md btn-light mx-4' href={backUrl} >Kembali</Link>
+                <Link className='btn btn-md btn-light mx-4' href={backUrl}>Kembali</Link>
                 <button className='btn btn-md btn-dark' type="submit">Submit</button>
               </div>
             </div>

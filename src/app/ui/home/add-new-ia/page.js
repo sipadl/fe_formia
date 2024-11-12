@@ -110,7 +110,7 @@ export default function page() {
                     }, {
                         title: 'Downtime message',
                         name: 'down_time_msg',
-                        tipe: 1
+                        tipe: 0
                     }
                 ]}/>
         </div>
