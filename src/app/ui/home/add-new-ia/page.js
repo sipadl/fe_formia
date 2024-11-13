@@ -7,6 +7,7 @@ export default function page() {
             <h4 className='text-center text-uppercase'>Changes Impact Analisis</h4>
             <hr></hr>
             <Inputan
+                url={'/api/ia/add'}
                 backUrl={'/ui/home'}
                 values={[
                     {

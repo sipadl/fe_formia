@@ -1,26 +1,31 @@
+'use client'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from 'react';
+import { MainAuthLayout, MainNonAuthLayout } from './component';
 import './globals.css';
-import {getServerSession} from 'next-auth';
-import {MainAuthLayout, MainNonAuthLayout} from './component';
-import { redirect } from 'next/dist/server/api-utils';
-import Link from 'next/link';
 
-const Layout = async ({children}) => {
+const Layout = ({children}) => {
+    const [session, setSession] = useState(null);
+    
+    useEffect(() => {
+        const token = localStorage.getItem('_token');
+        setSession(token)        
+    },[])
+
+
     const metadata = {
         title: 'xxx',
         description: 'A simple Next.js application with Bootstrap'
     };
-    const session = await getServerSession();
 
     return (
         <html lang="en">
             <body className="d-flex flex-column min-vh-100">
-                <title>{metadata.title}</title>
-                <meta name='description' content={metadata.description} />
-                {
+                <title>{metadata ? metadata.title : ''}</title>
+                <meta name='description' content={metadata ? metadata.description : ''}/> {
                     session
-                        ? <MainAuthLayout children={children} />
-                        : <MainNonAuthLayout metadata={metadata} />
+                        ? <MainAuthLayout children={children} metadata={metadata} />
+                        : <MainNonAuthLayout metadata={metadata}/>
                 }
             </body>
         </html>

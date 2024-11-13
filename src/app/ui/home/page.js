@@ -1,42 +1,25 @@
 "use client"
-import {faker} from '@faker-js/faker';
+import { fetchData } from '@/app/utils/network';
 import Link from 'next/link';
-import React, {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 
 export default function Page() {
     const [data, setData] = useState([]);
     const [isClient, setIsClient] = useState(false);
-
+    
     useEffect(() => {
-        setIsClient(true); // Only render on the client
-        const generatedData = [];
-        for (let i = 0; i <= 100; i++) {
-            generatedData.push({
-                id: i + 1,
-                name: faker
-                    .person
-                    .fullName(),
-                email: faker
-                    .internet
-                    .email(),
-                redmine_no: faker
-                    .number
-                    .int({min: 1000, max: 9999}),
-                status: faker
-                    .datatype
-                    .boolean(),
-                created_at: faker
-                    .date
-                    .past()
-                    .toLocaleDateString(),
-                updated_at: faker
-                    .date
-                    .recent()
-                    .toLocaleDateString()
-            });
-        }
-        setData(generatedData);
+        const fetchDataAsync = async () => {
+            try {
+                setIsClient(true); 
+                const resp = await fetchData();       
+                setData(resp.data);
+            } catch (error) {
+                console.warn("Error fetching data:", error.message);
+            }
+        };
+        
+        fetchDataAsync();
     }, []);
 
     const customStyles = {

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import EditorConvertToHTML from './EditorConvertToHTML';  // Ensure correct import path
+import { postData } from '../utils/network';
 
 export default function Inputan({ values = [], url, backUrl }) {
     const [formData, setFormData] = useState({});
@@ -30,9 +31,15 @@ export default function Inputan({ values = [], url, backUrl }) {
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit =  async (e) => {
         e.preventDefault();
+        console.log(url);
         console.log(formData);
+        // setTimeout(async () => {
+            const resp = await postData(url, formData)
+            console.log(resp);
+        // }, 3000)
+
     };
 
     return (

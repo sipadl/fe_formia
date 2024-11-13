@@ -1,11 +1,12 @@
 'use client'
-import {Formik} from 'formik'
+import { Formik } from 'formik'
 import Image from 'next/image'
-import React from 'react'
-import Inputan from './Inputan'
-import { fetchData, postData } from '../utils/network'
+import { useRouter } from 'next/compat/router'
+import { postData } from '../utils/network'
+import { redirect } from 'next/navigation'
 
 export default function MainNonAuthLayout() {
+    const router = useRouter();
     return (
         <> <div className = "container vh-100 d-flex align-items-center justify-content-center" > <div
             className="row w-100 shadow-lg p-4 rounded">
@@ -27,10 +28,13 @@ export default function MainNonAuthLayout() {
                     //     return errors;
                     // }}
                     onSubmit={(values, {setSubmitting}) => {
+                        setSubmitting(true);
                         setTimeout( async () => {
-                            const res = await postData('/auth/login', JSON.stringify(values, null, 2));
-                            console.log(res);
+                            const response = await postData('/api/auth/login', values);
+                            console.log(response);
+                            localStorage.setItem('_token', response.data.token)
                             setSubmitting(false);
+                            redirect('/ui/home');
                         }, 400);
                     }}>
                     {
