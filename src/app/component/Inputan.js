@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import EditorConvertToHTML from './EditorConvertToHTML';  // Ensure correct import path
 import { postData } from '../utils/network';
+import { redirect } from 'next/navigation';
 
 export default function Inputan({ values = [], url, backUrl }) {
     const [formData, setFormData] = useState({});
@@ -27,19 +28,21 @@ export default function Inputan({ values = [], url, backUrl }) {
     const handleChange = (name, value, isMulti = false) => {
         setFormData((prevData) => ({
             ...prevData,
-            [name]: isMulti ? [...value] : value, // Ensure value is an array if `multiple` is true
+            [name]: isMulti ? value.join(', ') : value, // Join array values as a comma-separated string if `isMulti` is true
         }));
     };
 
     const handleSubmit =  async (e) => {
         e.preventDefault();
-        console.log(url);
-        console.log(formData);
         // setTimeout(async () => {
             const resp = await postData(url, formData)
             console.log(resp);
+            if(resp.status == 200 ){
+                redirect(`${backUrl}`)
+            } else {
+                console.log(resp);
+            }
         // }, 3000)
-
     };
 
     return (

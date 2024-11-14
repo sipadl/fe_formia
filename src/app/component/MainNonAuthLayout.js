@@ -1,12 +1,23 @@
 'use client'
 import { Formik } from 'formik'
 import Image from 'next/image'
-import { useRouter } from 'next/compat/router'
 import { postData } from '../utils/network'
 import { redirect } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function MainNonAuthLayout() {
     const router = useRouter();
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+    //    const clearData = () => (
+    //         localStorage.clear()
+    //     )
+
+    //     if(isLogin == false) {
+    //         clearData();
+    //     }
+    },[isLogin])
     return (
         <> <div className = "container vh-100 d-flex align-items-center justify-content-center" > <div
             className="row w-100 shadow-lg p-4 rounded">
@@ -32,9 +43,10 @@ export default function MainNonAuthLayout() {
                         setTimeout( async () => {
                             const response = await postData('/api/auth/login', values);
                             console.log(response);
-                            localStorage.setItem('_token', response.data.token)
+                            localStorage.setItem('_token', response.data.data.token)
+                            setIsLogin(true);
                             setSubmitting(false);
-                            redirect('/ui/home');
+                            router.replace('/ui/home');
                         }, 400);
                     }}>
                     {
