@@ -1,12 +1,14 @@
 'use client'
 import { Formik } from 'formik'
 import Image from 'next/image'
-import { useRouter } from 'next/compat/router'
 import { postData } from '../utils/network'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux'
+import { login } from '@/store/slices/authSlices'
 
 export default function MainNonAuthLayout() {
     const router = useRouter();
+    const dispatch = useDispatch();
     return (
         <> <div className = "container vh-100 d-flex align-items-center justify-content-center" > <div
             className="row w-100 shadow-lg p-4 rounded">
@@ -34,7 +36,10 @@ export default function MainNonAuthLayout() {
                             console.log(response);
                             localStorage.setItem('_token', response.data.token)
                             setSubmitting(false);
-                            redirect('/ui/home');
+                            dispatch(login(
+                                response.data.user
+                            ))
+                            router.push('/ui/home');
                         }, 400);
                     }}>
                     {

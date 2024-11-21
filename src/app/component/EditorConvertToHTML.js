@@ -42,9 +42,6 @@ render() {
           onEditorStateChange={this.onEditorStateChange}
           toolbar={toolbarOptions}
         />
-        {/* <textarea
-        //   value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-        /> */}
       </div>
     );
   }

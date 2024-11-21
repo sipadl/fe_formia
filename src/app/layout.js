@@ -1,35 +1,29 @@
-'use client'
+'use client';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState } from 'react';
-import { MainAuthLayout, MainNonAuthLayout } from './component';
+import { Provider } from 'react-redux'; // Redux Provider
+import store from '../store'; // Import Redux store
+import AppWrapper from './utils/AppWrapper'; // Authenticated/non-authenticated wrapper
 import './globals.css';
 
-const Layout = ({children}) => {
-    const [session, setSession] = useState(null);
-    
-    useEffect(() => {
-        const token = localStorage.getItem('_token');
-        setSession(token)        
-    },[])
-
-
+const Layout = ({ children }) => {
     const metadata = {
-        title: 'xxx',
+        title: 'My Next.js App',
         description: 'A simple Next.js application with Bootstrap'
     };
 
     return (
         <html lang="en">
+            <head>
+                <title>{metadata.title}</title>
+                <meta name="description" content={metadata.description} />
+            </head>
             <body className="d-flex flex-column min-vh-100">
-                <title>{metadata ? metadata.title : ''}</title>
-                <meta name='description' content={metadata ? metadata.description : ''}/> {
-                    session
-                        ? <MainAuthLayout children={children} metadata={metadata} />
-                        : <MainNonAuthLayout metadata={metadata}/>
-                }
+                <Provider store={store}>
+                    <AppWrapper meta={metadata}>{children}</AppWrapper>
+                </Provider>
             </body>
         </html>
-    )
+    );
 };
 
 export default Layout;

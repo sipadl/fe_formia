@@ -3,25 +3,27 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import EditorConvertToHTML from './EditorConvertToHTML';  // Ensure correct import path
 import { postData } from '../utils/network';
+import { useRouter } from 'next/navigation';
 
 export default function Inputan({ values = [], url, backUrl }) {
+    const router = useRouter();
     const [formData, setFormData] = useState({});
 
-    useEffect(() => {
-        let isMounted = true;
+    // useEffect(() => {
+    //     let isMounted = true;
         
-        if (values.length > 0 && isMounted) {
-            const initialData = values.reduce((acc, val) => ({
-                ...acc,
-                [val.name]: ''
-            }), {});
-            setFormData(initialData);
-        }
+    //     if (values.length > 0 && isMounted) {
+    //         const initialData = values.reduce((acc, val) => ({
+    //             ...acc,
+    //             [val.name]: ''
+    //         }), {});
+    //         setFormData(initialData);
+    //     }
     
-        return () => {
-            isMounted = false;
-        };
-    }, [values]);
+    //     return () => {
+    //         isMounted = false;
+    //     };
+    // }, [values]);
     
 
     const handleChange = (name, value, isMulti = false) => {
@@ -38,6 +40,7 @@ export default function Inputan({ values = [], url, backUrl }) {
         // setTimeout(async () => {
             const resp = await postData(url, formData)
             console.log(resp);
+            router.push('/ui/home')
         // }, 3000)
 
     };
