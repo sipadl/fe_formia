@@ -15,17 +15,7 @@ export const fetchData = async ({url}) => {
       });
       return response.data;
   } catch (error) {
-      if (error.response) {
-          // Server responded with a status other than 2xx
-          console.error('Response error:', error.response.status, error.response.data);
-      } else if (error.request) {
-          // Request was made but no response received
-          console.error('Request error:', error.request);
-      } else {
-          // Something else happened
-          console.error('Error:', error.message);
-      }
-      throw error;
+      return error;
   }
 };
 
@@ -37,10 +27,9 @@ export const postData = async (url, data) => {
             'Accept': 'application/hal+json'
         }
     });
-    console.log('Login successful:', response.data);
     return response.data;
 } catch (err) {
-    console.error('Login failed:', err.message);
+    console.error('failed:', err.message);
     if (err.response) {
         console.error('Response data:', err.response.data);
         console.error('Status:', err.response.status);

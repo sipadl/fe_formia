@@ -1,19 +1,49 @@
 'use client'
-import {Inputan} from '@/app/component';
-import {Formik} from 'formik';
-import React, {useEffect, useState} from 'react'
-import { useSelector } from 'react-redux';
+import { detail } from '@/store/slices/authSlices';
+import { Field, Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function page() {
     const [isActived, setIsActived] = useState('profile');
-    const [data, setData] = useState({});
+    const [data, setData] = useState({
+        namaLengkap: "",
+        username: "",
+        created_at: "",
+        password: '',
+        old_password:'',
+        confirmation_password:''
+      });
     const auth = useSelector((state) => state.auth)
-    
-    useEffect(() => {
-        setData(auth);
-    },[data])
+    const dispatch = useDispatch()
 
-    console.log(auth)
+    // Decode data from localStorage and dispatch to the state
+    useEffect(() => {
+        const decodeData = () => {
+        const cookieData = localStorage.getItem("_cookie");
+        if (cookieData) {
+            const decodedData = JSON.parse(atob(cookieData));
+            dispatch(detail(decodedData)); // Assuming `detail` is an action
+        }
+        };
+
+        decodeData();
+    }, [dispatch]);
+
+    // Update data when `auth.detail` changes
+    useEffect(() => {
+        if (auth.detail) {
+        const { user } = auth.detail;
+        setData({
+            namaLengkap: user.namaLengkap || "",
+            username: user.username || "",
+            created_at: user.createdAt || "",
+        });
+        }
+    }, [auth.detail]);
+
+
+    console.log("disini", data)
     return (
         <div>
             <div className='mb-4'>
@@ -38,11 +68,6 @@ export default function page() {
                 isActived == 'profile'
                     ? <div>
                     <Formik
-                        initialValues={{
-                            namaLengkap: '',
-                            username: '',
-                            created_at: ''
-                        }}
                         onSubmit={(e) => {
                             console.log(e);
                         }}
@@ -53,8 +78,9 @@ export default function page() {
                                 <div className='col-md-9'>
                                     <input
                                         className='form-control'
-                                        name='namaLengkap'
                                         value={data.namaLengkap}
+                                        readOnly={true}
+                                        name='namaLengkap'
                                         placeholder='Masukan nama lengkap'/>
                                 </div>
                             </div>
@@ -65,64 +91,77 @@ export default function page() {
                                         className='form-control'
                                         name='username'
                                         value={data.username}
+                                        readOnly={true}
                                         placeholder='Masukan username'/>
                                 </div>
                             </div>
                             <div className='d-flex justify-content-end'>
                                 <button className='btn btn-sm btn-light' type='reset'>Kembali</button>
-                                <button className='btn btn-sm btn-dark' type='submit'>Ubah Data</button>
+                                {/* <button className='btn btn-sm btn-dark' type='submit'>Ubah Data</button> */}
                             </div>
                         </form>
                     </Formik>
                 </div>
                     : <div>
-                            <Formik
+                             <Formik
                                 initialValues={{
                                     old_password: '',
                                     password: '',
-                                    confirmation_password: ''
+                                    confirmation_password: '',
                                 }}
-                                onSubmit={(e) => {
-                                    console.log(e);
+                                onSubmit={(values) => {
+                                    console.log(values);
                                 }}
                                 >
-                                <form>
-                                    <div className='form-group row mb-3'>
-                                        <label className='label-form col-md-3'>Password Lama</label>
-                                        <div className='col-md-9'>
-                                            <input
-                                                className='form-control'
-                                                type='password'
-                                                name='old_password'
-                                                placeholder='Masukan password lama'/>
+                                {() => (
+                                    <Form>
+                                    <div className="form-group row mb-3">
+                                        <label className="label-form col-md-3">Password Lama</label>
+                                        <div className="col-md-9">
+                                        <Field
+                                            className="form-control"
+                                            type="password"
+                                            name="old_password"
+                                            placeholder="Masukan password lama"
+                                        />
                                         </div>
                                     </div>
-                                    <div className='form-group row mb-3'>
-                                        <label className='label-form col-md-3'>Password Baru </label>
-                                        <div className='col-md-9'>
-                                            <input
-                                                className='form-control'
-                                                type='password'
-                                                name='new_password'
-                                                placeholder='Masukan password baru'/>
+
+                                    <div className="form-group row mb-3">
+                                        <label className="label-form col-md-3">Password Baru</label>
+                                        <div className="col-md-9">
+                                        <Field
+                                            className="form-control"
+                                            type="password"
+                                            name="password"
+                                            placeholder="Masukan password baru"
+                                        />
                                         </div>
                                     </div>
-                                    <div className='form-group row mb-3'>
-                                        <label className='label-form col-md-3'>Konfirmasi Password</label>
-                                        <div className='col-md-9'>
-                                            <input
-                                                className='form-control'
-                                                type='password'
-                                                name='confirmation_password'
-                                                placeholder='Konfirmasi Password'/>
+
+                                    <div className="form-group row mb-3">
+                                        <label className="label-form col-md-3">Konfirmasi Password</label>
+                                        <div className="col-md-9">
+                                        <Field
+                                            className="form-control"
+                                            type="password"
+                                            name="confirmation_password"
+                                            placeholder="Konfirmasi Password"
+                                        />
                                         </div>
                                     </div>
-                                    <div className='d-flex justify-content-end'>
-                                        <button className='btn btn-sm btn-light' type='reset'>Kembali</button>
-                                        <button className='btn btn-sm btn-dark' type='submit'>Ubah Password</button>
+
+                                    <div className="d-flex justify-content-end">
+                                        <button className="btn btn-sm btn-light" type="reset">
+                                        Kembali
+                                        </button>
+                                        <button className="btn btn-sm btn-dark" type="submit">
+                                        Ubah Password
+                                        </button>
                                     </div>
-                                </form>
-                            </Formik>
+                                    </Form>
+                                )}
+                                </Formik>
                         </div>
             }
         </div>
