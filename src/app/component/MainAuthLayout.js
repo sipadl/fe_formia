@@ -24,13 +24,13 @@ export default function MainAuthLayout({children, metadata}) {
                 <h5 className="p-3">Menu</h5>
                 <ul className="nav flex-column">
                     <li className="nav-item">
-                        <Link href="/ui/home" className="nav-link btn btn-sm btn-light mx-1 text-start">Home</Link>
+                        <Link href="/ui/home" className="nav-link btn btn-sm btn-light mx-2 text-start">Home</Link>
                     </li>
+                    {/* <li className="nav-item">
+                        <Link href="/ui/list" className="nav-link btn btn-sm btn-light mx-2 text-start">List</Link>
+                    </li> */}
                     <li className="nav-item">
-                        <Link href="/ui/list" className="nav-link btn btn-sm btn-light mx-1 text-start">List</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link href="/ui/profile" className="nav-link btn btn-sm btn-light mx-1 text-start">Profile</Link>
+                        <Link href="/ui/profile" className="nav-link btn btn-sm btn-light mx-2 text-start">Profile</Link>
                     </li>
                     <hr className='mx-3' />
                     <li className="nav-item ">
