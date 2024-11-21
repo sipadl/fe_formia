@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {redirect} from 'next/navigation';
 
 const baseUrl = 'http://localhost:8080'; // Backend base URL
 const yourToken = localStorage.getItem('_token')
@@ -14,7 +15,6 @@ export const fetchData = async ({url}) => {
       });
       return response.data;
   } catch (error) {
-    console.log(error)
       if (error.response) {
           // Server responded with a status other than 2xx
           console.error('Response error:', error.response.status, error.response.data);
@@ -29,7 +29,6 @@ export const fetchData = async ({url}) => {
   }
 };
 
-
 export const postData = async (url, data) => {
   try {
     const response = await axios.post(`${baseUrl}${url}`, data, {
@@ -38,16 +37,15 @@ export const postData = async (url, data) => {
             'Accept': 'application/hal+json'
         }
     });
-    console.log('ress :', response.data);
+    console.log('Login successful:', response.data);
     return response.data;
 } catch (err) {
-    console.log(err)
-    const error = err.response.data;
-    return error
+    console.error('Login failed:', err.message);
+    if (err.response) {
+        console.error('Response data:', err.response.data);
+        console.error('Status:', err.response.status);
+        console.error('Headers:', err.response.headers);
+    }
+    throw error;
 }
 };
-
-
-
-
-

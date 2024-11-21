@@ -12,8 +12,8 @@ export default function Page() {
         const fetchDataAsync = async () => {
             try {
                 setIsClient(true); 
-                const resp = await fetchData();       
-                setData(resp.data);
+                const resp = await fetchData('/api/ia/list');
+                setData(resp.data.data);
             } catch (error) {
                 console.warn("Error fetching data:", error.message);
             }
@@ -52,14 +52,14 @@ export default function Page() {
             sortable: true,
             width: '8%'
         }, {
-            name: 'Name',
-            selector: row => row.name
+            name: 'Nama',
+            selector: row => row.title
         }, {
-            name: 'Email',
-            selector: row => row.email
+            name: 'Pembuat',
+            selector: row => row.creator
         }, {
             name: 'No Redmine',
-            selector: row => row.redmine_no
+            selector: row => row.redmineNo
         }, {
             name: 'Status',
             selector: row => (
@@ -69,14 +69,14 @@ export default function Page() {
             )
         }, {
             name: 'Tanggal Buat',
-            selector: row => row.created_at
+            selector: row => row.createdAt
         }, {
             name: 'Tanggal Ubah',
-            selector: row => row.updated_at
+            selector: row => row.updatedAt
         }, {
             name: 'Action',
             cell: (row) => (
-                <Link href={`/ui/detail/${row.id}`} className="btn btn-light btn-sm">
+                <Link href={`/ui/home/details/${row.id}`} className="btn btn-light btn-sm">
                     Detail
                 </Link>
             ),
@@ -88,7 +88,6 @@ export default function Page() {
 
     if (!isClient) 
         return null; // Avoid rendering on server
-    
     return (
         <div>
             <div>

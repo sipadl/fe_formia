@@ -16,7 +16,7 @@ export default function page() {
                         tipe: 0
                     }, {
                         title: 'No Redmine',
-                        name: 'no_redmine',
+                        name: 'redmineNo',
                         customTipe:'number',
                         tipe: 0
                     }, {
@@ -24,6 +24,10 @@ export default function page() {
                         name: 'type_ia',
                         tipe: 2,
                         element: [
+                            {
+                                id:0,
+                                name: 'Pilih Satu'
+                            },
                             {
                                 id: 1,
                                 name: 'Incident'
@@ -34,7 +38,7 @@ export default function page() {
                         ]
                     }, {
                         title: 'Changes Area',
-                        name: 'changes_area',
+                        name: 'changes',
                         tipe: 2,
                         element: [
                             {
@@ -51,23 +55,23 @@ export default function page() {
                         isMulti: true
                     }, {
                         title: 'Existing Flow',
-                        name: 'existing_flow',
+                        name: 'existingFlow',
                         tipe: 1
                     }, {
                         title: 'Changes Flow',
-                        name: 'changes_flow',
+                        name: 'changesFlow',
                         tipe: 1
                     }, {
                         title: 'Testing Requirements',
-                        name: 'testing_requirement',
+                        name: 'testingRequirement',
                         tipe: 1
                     }, {
                         title: 'UAT ENV. DATA NEEDS',
-                        name: 'env_data',
+                        name: 'envData',
                         tipe: 1
                     }, {
                         title: 'data testing',
-                        name: 'data_testing',
+                        name: 'dataTesting',
                         tipe: 1
                     }, {
                         title: 'setup parameter',
@@ -75,7 +79,7 @@ export default function page() {
                         tipe: 1
                     }, {
                         title: 'changes of existing structure file',
-                        name: 'existing_structure_f',
+                        name: 'existingStructureFile',
                         tipe: 1
                     }, {
                         title: 'changes of database',
@@ -83,34 +87,30 @@ export default function page() {
                         tipe: 1
                     }, {
                         title: 'rekomended action / testing',
-                        name: 'recomended_action',
+                        name: 'recomendedAction',
                         tipe: 1
-                    }, {
-                        title: 'rekomended action / testing',
-                        name: 'recomended_action',
-                        tipe: 1
-                    }, {
-                        title: 'rekomended action / testing',
-                        name: 'recomended_action',
-                        tipe: 1
-                    }, {
+                    },  {
                         title: 'Downtime required',
-                        name: 'down_time',
+                        name: 'downTime',
                         tipe: 2,
                         element: [
                             {
-                                id: true,
+                                id: null,
+                                name: 'Pilih satu'
+                            },
+                            {
+                                id: 1,
                                 name: 'Yes',
                                 // option: true
                             }, {
-                                id: false,
+                                id: 0,
                                 name: 'No',
                                 // option: false
                             }
                         ]
                     }, {
                         title: 'Downtime message',
-                        name: 'down_time_msg',
+                        name: 'downTimeMsg',
                         tipe: 0
                     }
                 ]}/>
