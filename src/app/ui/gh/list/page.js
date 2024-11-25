@@ -1,42 +1,38 @@
-"use client"
-import { fetchData } from '@/app/utils/network';
+'use client'
+import { fetchData, getDataFromApi } from '@/app/utils/network';
 import axios from 'axios';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
 
-export default function Page() {
-    const [data, setData] = useState([]);
-    const [isClient, setIsClient] = useState(false);
+export default function page() {
+
+    const [data, setData] = useState([])
     
     useEffect(() => {
-        const fetchDataAsync = async () => {
-            try {
-                setIsClient(true); 
-                const resp = await fetchData(`http://localhost:8080/api/ia/list`);
-                setData(resp.data.data);
-            } catch (error) {
-                console.warn("Error fetching data:", error.message);
-            }
-        };
-        
-        fetchDataAsync();
+        const getListUser = async () => {
+            const dataUser = await fetchData('/api/main/gh/list')
+            setData(dataUser.data)
+        }
+
+        getListUser();
     }, []);
+    
 
     const customStyles = {
         rows: {
             style: {
-                overflow: 'visible', // or 'hidden' based on your requirement
+                allowoverflow: 'visible', // or 'hidden' based on your requirement
             }
         },
         headCells: {
             style: {
-                overflow: 'visible', // or 'hidden'
+                allowoverflow: 'visible', // or 'hidden'
             }
         },
         cells: {
             style: {
-                overflow: 'visible', // or 'hidden'
+                allowoverflow: 'visible', // or 'hidden'
             }
         }
     };
@@ -53,14 +49,11 @@ export default function Page() {
             sortable: true,
             width: '8%'
         }, {
-            name: 'Nama',
-            selector: row => row.title
-        }, {
-            name: 'Pembuat',
-            selector: row => row.creator
-        }, {
-            name: 'No Redmine',
-            selector: row => row.redmineNo
+            name: 'Nama Lengkap',
+            selector: row => row.name
+        },  {
+            name: 'Username',
+            selector: row => row.departement
         }, {
             name: 'Status',
             selector: row => (
@@ -77,8 +70,8 @@ export default function Page() {
         }, {
             name: 'Action',
             cell: (row) => (
-                <Link href={`/ui/home/details/${row.id}`} className="btn btn-light btn-sm">
-                    Detail
+                <Link href={`/ui/gh/edit/${row.id}`} className="btn btn-secondary btn-sm">
+                    Edit
                 </Link>
             ),
             ignoreRowClick: true,
@@ -86,21 +79,19 @@ export default function Page() {
             // button: true,
         }
     ];
-
-    if (!isClient) 
-        return null; // Avoid rendering on server
-    return (
-        <div>
-            <div>
-                <div className='row'>
+  return (
+    <div>
+      <h5 className=''>Management Group head</h5>
+        <hr />
+        <div className='row'>
                     <div className='col-md-6'>
-                        <h3 className='mx-1'>List Impact Analisis</h3>
+                        <h3 className='mx-1'>List group Head</h3>
                     </div>
                     <div className='col-md-6  mx-0 d-flex justify-content-end'>
                         <div>
                             <Link
-                                href={'/ui/home/add-new-ia'}
-                                className='btn btn-sm btn-dark  align-content-end'>+ Impact Analisis</Link>
+                                href={'/ui/gh/add-gh'}
+                                className='btn btn-sm btn-dark  align-content-end'>+ Group Head</Link>
                         </div>
                     </div>
                     <div className='border'>
@@ -112,7 +103,6 @@ export default function Page() {
                             className='p-2'/>
                     </div>
                 </div>
-            </div>
-        </div>
-    );
+    </div>
+  )
 }

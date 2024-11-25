@@ -43,7 +43,6 @@ export default function page() {
     }, [auth.detail]);
 
 
-    console.log("disini", data)
     return (
         <div>
             <div className='mb-4'>

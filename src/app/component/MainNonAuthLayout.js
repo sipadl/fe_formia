@@ -9,6 +9,8 @@ import { login, detail } from '@/store/slices/authSlices'
 export default function MainNonAuthLayout() {
     const router = useRouter();
     const dispatch = useDispatch();
+
+    // const {user} = 
     return (
         <> <div className = "container vh-100 d-flex align-items-center justify-content-center" > <div
             className="row w-100 shadow-lg p-4 rounded">
