@@ -13,8 +13,9 @@ export default function Page() {
         const fetchDataAsync = async () => {
             try {
                 setIsClient(true); 
-                const resp = await fetchData(`http://localhost:8080/api/ia/list`);
-                setData(resp.data.data);
+                const resp = await fetchData(`/api/ia/list`);
+                console.log(resp);
+                setData(resp.data);
             } catch (error) {
                 console.warn("Error fetching data:", error.message);
             }

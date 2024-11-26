@@ -13,12 +13,12 @@ export default function page() {
     useEffect(() => {
          const getData = async () => {
             const res = await fetchData(`/api/ia/detail/${id}`)
-            setDetail(res.data.data)
+            setDetail(res.data)
         }
          const getDataGh = async () => {
-            const res = await fetchData(`/api/main/gh/list/${id}`)
+            const res = await fetchData(`/api/main/gh/list/signature/${id}`)
             console.log(res);
-            setGroupHead(res.data.data)
+            setGroupHead(res.data)
         }
 
         getDataGh();

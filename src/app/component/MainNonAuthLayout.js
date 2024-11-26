@@ -34,14 +34,19 @@ export default function MainNonAuthLayout() {
                     onSubmit={(values, {setSubmitting}) => {
                         setSubmitting(true);
                         setTimeout( async () => {
-                            const response = await postData('/api/auth/login', values);
-                            // console.log(response.data.token);
-                            localStorage.setItem('_token', response.data.token)
-                            localStorage.setItem('_cookie', btoa(JSON.stringify(response.data)))
-                            dispatch(login({detail:response.data}))
-                            dispatch(detail(response.data))
-                            setSubmitting(false);
-                            router.push('/ui/home');
+                            try {
+                                const response = await postData('/api/auth/login', values);
+                                // console.log(response.data.token);
+                                localStorage.setItem('_token', response.data.token)
+                                localStorage.setItem('_cookie', btoa(JSON.stringify(response.data)))
+                                dispatch(login({detail:response.data}))
+                                dispatch(detail(response.data))
+                                setSubmitting(false);
+                                router.push('/ui/home');
+                            } catch (err) {
+                                console.warn(err);
+                                setSubmitting(false)
+                            }
                         }, 400);
                     }}>
                     {

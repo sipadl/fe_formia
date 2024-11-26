@@ -21,7 +21,7 @@ export default function MainAuthLayout({children, metadata}) {
         <div className="container-fluid flex-grow-1 d-flex m-0 p-0">
 
             <aside
-                className={`col-md-3 bg-dark text-light sidebar d-flex flex-column shadow-sm`}
+                className={`col-md-2 bg-dark text-light sidebar d-flex flex-column shadow-sm`}
                >
                 <h5 className="p-3">Menu</h5>
                 <ul className="nav flex-column">
@@ -59,7 +59,7 @@ export default function MainAuthLayout({children, metadata}) {
                 </ul>
             </aside>
 
-            <main className="col-md-9 col-lg-9 px-4 pt-4">
+            <main className="col-md-10 col-lg-10 px-4 pt-4">
                 {children}
             </main>
         </div>

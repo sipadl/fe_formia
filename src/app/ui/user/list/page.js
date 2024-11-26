@@ -12,7 +12,7 @@ export default function page() {
     useEffect(() => {
         const getListUser = async () => {
             const dataUser = await fetchData('/api/user/get')
-            setData(dataUser.data.data)
+            setData(dataUser.data)
         }
 
         getListUser();

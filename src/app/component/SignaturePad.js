@@ -3,9 +3,16 @@ import {Formik, Form, Field, ErrorMessage} from 'formik';
 import React, {useState, useRef} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import SignatureCanvas from 'react-signature-canvas';
-import { postData } from '../utils/network';
+import {postData} from '../utils/network';
 
-const CustomModal = ({show, handleClose, title, content, kunci, ghId}) => {
+const CustomModal = ({
+    show,
+    handleClose,
+    title,
+    content,
+    kunci,
+    ghId
+}) => {
     const sigCanvasRef = useRef(null);
 
     const clearSignature = () => {
@@ -16,7 +23,10 @@ const CustomModal = ({show, handleClose, title, content, kunci, ghId}) => {
 
     const saveSignature = (values) => {
         if (sigCanvasRef.current && !sigCanvasRef.current.isEmpty()) {
-            values.signature = sigCanvasRef.current.getTrimmedCanvas().toDataURL("image/png"); // Convert signature to base64
+            values.signature = sigCanvasRef
+                .current
+                .getTrimmedCanvas()
+                .toDataURL("image/png"); // Convert signature to base64
         } else {
             values.signature = ''; // Set signature as empty if the canvas is blank
         }
@@ -66,20 +76,22 @@ const CustomModal = ({show, handleClose, title, content, kunci, ghId}) => {
 
                                 <label>Signature</label>
                                 {/* <div className="card mb-2"> */}
-                                    <SignatureCanvas
-                                        ref={sigCanvasRef}
-                                        penColor="black"
-                                        canvasProps={{
-                                            width: 500,
-                                            height: 200,
-                                            className: 'signature-canvas'
-                                        }}/>
-                                {/* </div> */}
+                                <SignatureCanvas
+                                    ref={sigCanvasRef}
+                                    penColor="black"
+                                    canvasProps={{
+                                        width: 500,
+                                        height: 200,
+                                        className: 'signature-canvas'
+                                    }}/> {/* </div> */}
                                 <div className="mt-3">
-                                    <Button variant="secondary" onClick={() => {
-                                        clearSignature()
-                                        handleClose()
-                                    }} className="me-2">
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => {
+                                            clearSignature()
+                                            handleClose()
+                                        }}
+                                        className="me-2">
                                         Cancel
                                     </Button>
                                     <Button variant="primary" type="submit">
@@ -143,19 +155,23 @@ export default function SignaturePad({
                                     <div className="header-notes-inner">{val.departement}</div>
                                 </div>
                                 <div className="col-md-4 col-xs-12">
-                                    <div className="header-notes-inner">This is for notes</div>
+                                    <div className="header-notes-inner mb-2">
+                                        <div>Note :</div>
+                                        <p>
+                                            {val.notes || '-'}
+                                        </p>
+                                    </div>
                                 </div>
                                 <div className="col-md-4 col-xs-12">
-                                    <button
-                                        type="button"
-                                        className="btn btn-sm w-100 btn-dark"
-                                        onClick={() => handleShow("Review", `Review ${val.departement}`, val.id)}>
-                                        Sign
-                                    </button>
                                     {
-                                        signatures[val.id] && (
-                                            <img src={signatures[val.id]} alt="Review" className="signature-preview mt-2"/>
-                                        )
+                                        val.signature
+                                            ? <img src={val.signature} alt="Review" className="signature-preview mt-2"/>
+                                            : <button
+                                                    type="button"
+                                                    className="btn btn-sm w-100 btn-dark"
+                                                    onClick={() => handleShow("Review", `Review ${val.departement}`, val.id)}>
+                                                    Sign
+                                                </button>
                                     }
                                     <div className="header-notes-inner">{val.name}</div>
                                 </div>
@@ -163,6 +179,7 @@ export default function SignaturePad({
                             : ''
                     ))
                 }
+                <hr/>
                 <div className="col-md-4 col-xs-12 text-center mb-2">
                     <div className="header-notes-signature">Group/Department</div>
                 </div>
@@ -172,7 +189,7 @@ export default function SignaturePad({
                 <div className="col-md-4 col-xs-12 text-center mb-2">
                     <div className="header-notes-signature">Signature</div>
                 </div>
-                {
+                <hr/> {
                     values.map((val) => (
                         val.position == 2
                             ? <React.Fragment key={val.id}>
@@ -180,22 +197,18 @@ export default function SignaturePad({
                                     <div className="header-notes-inner">{val.departement}</div>
                                 </div>
                                 <div className="col-md-4 col-xs-12">
-                                    <div className="header-notes-inner">This is for notes</div>
+                                    <div className="header-notes-inner">{val.notes}</div>
                                 </div>
                                 <div className="col-md-4 col-xs-12">
-                                    <button
-                                        type="button"
-                                        className="btn btn-sm w-100 btn-dark"
-                                        onClick={() => handleShow("Review", `Review ${val.name}`, val.id)}>
-                                        Sign
-                                    </button>
-                                    {
-                                        signatures[val.id] && (
-                                            <img
-                                                src={signatures[val.id]}
-                                                alt="Signature"
-                                                className="signature-preview mt-2"/>
-                                        )
+                                {
+                                        val.signature
+                                            ? <img src={val.signature} alt="Review" className="signature-preview mt-2"/>
+                                            : <button
+                                                    type="button"
+                                                    className="btn btn-sm w-100 btn-dark"
+                                                    onClick={() => handleShow("Review", `Review ${val.departement}`, val.id)}>
+                                                    Sign
+                                                </button>
                                     }
                                     <div className="header-notes-inner">{val.name}</div>
                                 </div>

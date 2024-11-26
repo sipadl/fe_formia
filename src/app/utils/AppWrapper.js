@@ -3,10 +3,11 @@ import { detail, login, logout } from '@/store/slices/authSlices';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MainAuthLayout, MainNonAuthLayout } from '../component';
+import { useRouter } from 'next/navigation';
 
 const AppWrapper = ({ children , meta}) => {
     const dispatch = useDispatch();
-    
+    const router = useRouter();
     const validateToken = (token) => {
         try {
             const payload = JSON.parse(atob(token.split('.')[1])); // Decode JWT
@@ -17,9 +18,7 @@ const AppWrapper = ({ children , meta}) => {
         }
     };
     
-
     const { isAuthenticated } = useSelector((state) => state.auth);
-    console.log(isAuthenticated);
 
     useEffect(() => {
         
@@ -28,6 +27,7 @@ const AppWrapper = ({ children , meta}) => {
             dispatch(login({ token })); // Set state isAuthenticated = true
         } else {
             dispatch(logout()); // Set state isAuthenticated = false
+            router.push('/ui')
         }
 
         const cookie = localStorage.getItem('_cookie')
