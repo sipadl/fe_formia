@@ -11,21 +11,21 @@ export default function Inputan({ values = [], url, backUrl }) {
     const router = useRouter();
     const [formData, setFormData] = useState({});
 
-    // useEffect(() => {
-    //     let isMounted = true;
+    useEffect(() => {
+        let isMounted = true;
         
-    //     if (values.length > 0 && isMounted) {
-    //         const initialData = values.reduce((acc, val) => ({
-    //             ...acc,
-    //             [val.name]: ''
-    //         }), {});
-    //         setFormData(initialData);
-    //     }
+        if (values.length > 0 && isMounted) {
+            const initialData = values.reduce((acc, val) => ({
+                ...acc,
+                [val.name]: ''
+            }), {});
+            setFormData(initialData);
+        }
     
-    //     return () => {
-    //         isMounted = false;
-    //     };
-    // }, [values]);
+        return () => {
+            isMounted = false;
+        };
+    }, [values]);
     
 
     const handleChange = (name, value, isMulti = false) => {

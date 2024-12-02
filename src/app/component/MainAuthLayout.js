@@ -10,6 +10,7 @@ export default function MainAuthLayout({children, metadata}) {
     const auth = useSelector((state) => state.auth)
 
     const {user} = auth.detail
+    console.log(user);
     return (
         <>
         <header className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -34,7 +35,10 @@ export default function MainAuthLayout({children, metadata}) {
                     <li className="nav-item">
                         <Link href="/ui/profile" className="nav-link btn btn-sm btn-light mx-2 text-start">Profile</Link>
                     </li>
-                    {user.role == 1 ? 
+                    <li className="nav-item">
+                        <Link href="/ui/signature" className="nav-link btn btn-sm btn-light mx-2 text-start">Signature</Link>
+                    </li>
+                    {user.role.name == 'ADMIN' ? 
                     <>
                     <hr className='mx-3' />
                     <h5 className='p-3'>Admin</h5>

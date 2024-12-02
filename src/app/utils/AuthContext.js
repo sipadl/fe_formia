@@ -1,5 +1,5 @@
 // src/app/ui/contexts/AuthContext.js
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 

@@ -7,22 +7,22 @@ import { useEffect, useState } from 'react';
 export default function page() {
     const router = window.location.pathname.split('/');
     const id = router[4] || 1;
-    console.log(id);
-    const [detail, setDetail] = useState([]);
+    const [detail, setDetail] = useState({});
     const [groupHead, setGroupHead] = useState([]);
     useEffect(() => {
-         const getData = async () => {
-            const res = await fetchData(`/api/ia/detail/${id}`)
-            setDetail(res.data)
-        }
-         const getDataGh = async () => {
-            const res = await fetchData(`/api/main/gh/list/signature/${id}`)
-            console.log(res);
-            setGroupHead(res.data)
-        }
-
-        getDataGh();
-        getData();
+        setTimeout(() => {
+            const getData = async () => {
+                const res = await fetchData(`/api/ia/detail/${id}`)
+                setDetail(res.data)
+            }
+            const getDataGh = async () => {
+                const res = await fetchData(`/api/main/gh/list/signature/${id}`)
+                console.log(res);
+                setGroupHead(res.data)
+            }
+            getDataGh();
+            getData();
+        }, 3000);
     },[id])
     return (
         <div>

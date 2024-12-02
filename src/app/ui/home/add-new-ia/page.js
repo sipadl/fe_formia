@@ -1,3 +1,4 @@
+'use client'
 import {Inputan} from '@/app/component'
 import React from 'react'
 

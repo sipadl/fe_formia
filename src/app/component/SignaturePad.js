@@ -5,6 +5,13 @@ import {Modal, Button} from 'react-bootstrap';
 import SignatureCanvas from 'react-signature-canvas';
 import {postData} from '../utils/network';
 
+function convertToDDMMYYYY(dateString) {
+    const date = new Date(dateString);
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    const formattedDate = new Intl.DateTimeFormat('en-GB', options).format(date);
+    return formattedDate;
+}
+
 const CustomModal = ({
     show,
     handleClose,
@@ -52,7 +59,7 @@ const CustomModal = ({
                         saveSignature(values);
                         setTimeout(async () => {
                             const datax = await postData('/api/main/signature', values);
-                            console.log(datax);
+                            window.location.reload();
                         }, 3000);
                         // window.location.reload()
                     }}>
@@ -152,20 +159,35 @@ export default function SignaturePad({
                         val.position == 1
                             ? <React.Fragment key={val.id}>
                                 <div className="col-md-4 col-xs-12">
-                                    <div className="header-notes-inner">{val.departement}</div>
+                                    <div className="header-notes-inner">{(val.userDetail.departement.departementName).toUpperCase()}</div>
                                 </div>
                                 <div className="col-md-4 col-xs-12">
                                     <div className="header-notes-inner mb-2">
+                                        <div className='mb-2'>
+                                            Impact : <strong>{val.impact == null ? 'Tidak' : 'Ya'}</strong>
+                                        </div>
+                                        <hr />
                                         <div>Note :</div>
                                         <p>
                                             {val.notes || '-'}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="col-md-4 col-xs-12">
+                                <div className="col-md-4 col-xs-12 mb-4 align-self-center">
                                     {
                                         val.signature
-                                            ? <img src={val.signature} alt="Review" className="signature-preview mt-2"/>
+                                            ?
+                                            <>
+                                            <div className='text-center' style={{
+                                                width: 'auto',
+                                                objectFit: 'cover',
+                                                objectPosition: 'center',
+                                                height: '100px',
+                                            }}>
+                                            <img src={val.signature} alt="Review" className="signature-preview mt-2"/>
+                                            </div> 
+                                            <div className="header-notes-inner text-start">Date: {convertToDDMMYYYY(val.createdAt)}</div>
+                                                </>
                                             : <button
                                                     type="button"
                                                     className="btn btn-sm w-100 btn-dark"
@@ -173,7 +195,7 @@ export default function SignaturePad({
                                                     Sign
                                                 </button>
                                     }
-                                    <div className="header-notes-inner">{val.name}</div>
+                                    <div className="header-notes-inner text-center">{val.name}</div>
                                 </div>
                             </React.Fragment>
                             : ''
@@ -192,28 +214,48 @@ export default function SignaturePad({
                 <hr/> {
                     values.map((val) => (
                         val.position == 2
-                            ? <React.Fragment key={val.id}>
-                                <div className="col-md-4 col-xs-12">
-                                    <div className="header-notes-inner">{val.departement}</div>
+                        ? <React.Fragment key={val.id}>
+                            <div className="col-md-4 col-xs-12">
+                                <div className="header-notes-inner">{(val.userDetail.departement.departementName).toUpperCase()}</div>
+                            </div>
+                            <div className="col-md-4 col-xs-12">
+                                <div className="header-notes-inner mb-2">
+                                    <div className='mb-2'>
+                                        Impact : <strong>{val.impact == null ? 'Tidak' : 'Ya'}</strong>
+                                    </div>
+                                    <hr />
+                                    <div>Note :</div>
+                                    <p>
+                                        {val.notes || '-'}
+                                    </p>
                                 </div>
-                                <div className="col-md-4 col-xs-12">
-                                    <div className="header-notes-inner">{val.notes}</div>
-                                </div>
-                                <div className="col-md-4 col-xs-12">
+                            </div>
+                            <div className="col-md-4 col-xs-12 mb-4 align-self-center">
                                 {
-                                        val.signature
-                                            ? <img src={val.signature} alt="Review" className="signature-preview mt-2"/>
-                                            : <button
-                                                    type="button"
-                                                    className="btn btn-sm w-100 btn-dark"
-                                                    onClick={() => handleShow("Review", `Review ${val.departement}`, val.id)}>
-                                                    Sign
-                                                </button>
-                                    }
-                                    <div className="header-notes-inner">{val.name}</div>
-                                </div>
-                            </React.Fragment>
-                            : ''
+                                    val.signature
+                                        ?
+                                        <>
+                                        <div className='text-center' style={{
+                                            width: 'auto',
+                                            objectFit: 'cover',
+                                            objectPosition: 'center',
+                                            height: '100px',
+                                        }}>
+                                        <img src={val.signature} alt="Review" className="signature-preview mt-2"/>
+                                        </div> 
+                                        <div className="header-notes-inner text-start">Date: {convertToDDMMYYYY(val.createdAt)}</div>
+                                            </>
+                                        : <button
+                                                type="button"
+                                                className="btn btn-sm w-100 btn-dark"
+                                                onClick={() => handleShow("Review", `Review ${val.departement}`, val.id)}>
+                                                Sign
+                                            </button>
+                                }
+                                <div className="header-notes-inner text-center">{val.name}</div>
+                            </div>
+                        </React.Fragment>
+                        : ''
                     ))
                 }
             </div>
