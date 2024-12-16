@@ -1,10 +1,11 @@
 'use client'
 import { Formik } from 'formik'
 import Image from 'next/image'
-import { postData } from '../utils/network'
+import { postData, postDataWithoutAuth } from '../utils/network'
 import { useRouter } from 'next/navigation'
 import { useDispatch } from 'react-redux'
 import { login, detail } from '@/store/slices/authSlices'
+
 
 export default function MainNonAuthLayout() {
     const router = useRouter();
@@ -35,10 +36,10 @@ export default function MainNonAuthLayout() {
                         setSubmitting(true);
                         setTimeout( async () => {
                             try {
-                                const response = await postData('/api/auth/login', values);
+                                const response = await postDataWithoutAuth('/api/auth/login', values);
                                 // console.log(response.data.token);
-                                localStorage.setItem('_token', response.data.token)
-                                localStorage.setItem('_cookie', btoa(JSON.stringify(response.data)))
+                                sessionStorage.setItem('_token', response.data.token)
+                                sessionStorage.setItem('_cookie', btoa(JSON.stringify(response.data)))
                                 dispatch(login({detail:response.data}))
                                 dispatch(detail(response.data))
                                 setSubmitting(false);

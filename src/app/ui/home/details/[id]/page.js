@@ -10,7 +10,7 @@ export default function page() {
     const [detail, setDetail] = useState({});
     const [groupHead, setGroupHead] = useState([]);
     useEffect(() => {
-        setTimeout(() => {
+        // setTimeout(() => {
             const getData = async () => {
                 const res = await fetchData(`/api/ia/detail/${id}`)
                 setDetail(res.data)
@@ -22,7 +22,7 @@ export default function page() {
             }
             getDataGh();
             getData();
-        }, 3000);
+        // }, 3000);
     },[id])
     return (
         <div>
@@ -36,7 +36,7 @@ export default function page() {
                         title: 'Title',
                         name: 'title',
                         tipe: 0,
-                        output: detail.title
+                        output: detail.title || ''
                     }, {
                         title: 'No Redmine',
                         name: 'redmineNo',

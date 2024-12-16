@@ -22,18 +22,18 @@ const AppWrapper = ({ children , meta}) => {
 
     useEffect(() => {
         
-        const token = localStorage.getItem('_token'); // Cek token di localStorage
+        const token = sessionStorage.getItem('_token'); // Cek token di sessionStorage
         if (token && validateToken(token)) {
             dispatch(login({ token })); // Set state isAuthenticated = true
         } else {
             dispatch(logout()); // Set state isAuthenticated = false
-            router.push('/ui')
+            router.push('/ui/home')
         }
 
-        const cookie = localStorage.getItem('_cookie')
+        const cookie = sessionStorage.getItem('_cookie')
         if(cookie){
             const decodeData = () => {
-                const cookieData = localStorage.getItem("_cookie");
+                const cookieData = sessionStorage.getItem("_cookie");
                 if (cookieData) {
                     const decodedData = JSON.parse(atob(cookieData));
                     dispatch(detail(decodedData)); // Assuming `detail` is an action

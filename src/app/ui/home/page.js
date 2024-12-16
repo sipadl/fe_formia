@@ -12,8 +12,8 @@ export default function Page() {
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
-                const response = await fetchData('/api/ia/list');
-                const formattedData = response.data.map((item, index) => ({
+                const response = await fetchData('/api/ia/list?size=300&sort=id,createdAt');
+                const formattedData = response.data.content.map((item, index) => ({
                     key: index+1,
                     id: item.id,
                     title: item.title,

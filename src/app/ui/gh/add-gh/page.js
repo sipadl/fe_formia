@@ -1,10 +1,29 @@
 'use client';
-import { postData } from '@/app/utils/network';
+import { fetchData, postData } from '@/app/utils/network';
 import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
     const router = useRouter();
+    const [departement, setDepartement] = useState([]);
+    const [listUser, setListUser] = useState([]);
+
+
+    useEffect(() => {
+        const getDepartement = async () => {
+            const datadepartement = await fetchData('/api/main/departement/list');
+            setDepartement(datadepartement.data)
+        }
+        const getUser = async () => {
+            const dataUser = await fetchData('/api/user/get');
+            setListUser(dataUser.data)
+        }
+
+        getUser();
+        getDepartement();
+    }, [setDepartement, setListUser])
+
     return (
         <div>
             <div className="h4">Tambah Group Head</div>
@@ -13,7 +32,7 @@ export default function Page() {
                 initialValues={{
                     name: '',
                     departement: '',
-                    position: '1', // Default value for position
+                    position: '', // Default value for position
                 }}
                 validate={(values) => {
                     const errors = {};
@@ -24,6 +43,7 @@ export default function Page() {
                 }}
                 onSubmit={async (values) => {
                     const submit = await postData('/api/main/gh/add', values);
+                    console.log(submit)
                     router.push('/ui/gh/list')
                 }}
             >
@@ -42,11 +62,29 @@ export default function Page() {
                         <div className="form-group row mb-3">
                             <label className="label-form col-md-3">Departement</label>
                             <div className="col-md-9">
-                                <Field
+                                <Field as="select"
                                     className="form-control"
-                                    name="departement"
-                                    placeholder="Masukan Departement"
-                                />
+                                    name="departement">
+                                        {departement.map((val, index) => {
+                                            return (
+                                                <option key={index} value={val.id}>{val.departementName}</option>
+                                            )
+                                        })}
+                                </Field>
+                            </div>
+                        </div>
+                        <div className="form-group row mb-3">
+                            <label className="label-form col-md-3">Akun Terkait</label>
+                            <div className="col-md-9">
+                                <Field as="select"
+                                    className="form-control"
+                                    name="departement">
+                                        {listUser.map((val, index) => {
+                                            return (
+                                                <option key={index} value={val.id}>{val.namaLengkap}</option>
+                                            )
+                                        })}
+                                </Field>
                             </div>
                         </div>
                         <div className="form-group row mb-3">

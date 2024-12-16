@@ -52,7 +52,7 @@ export default function page() {
             name: 'Nama Lengkap',
             selector: row => row.name
         },  {
-            name: 'Username',
+            name: 'Departement',
             selector: row => row.departement
         }, {
             name: 'Status',

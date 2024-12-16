@@ -1,5 +1,6 @@
 'use client';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Provider } from 'react-redux'; // Redux Provider
 import store from '../store'; // Import Redux store
 import AppWrapper from './utils/AppWrapper'; // Authenticated/non-authenticated wrapper

@@ -1,6 +1,7 @@
 'use client'
 import {postData} from '@/app/utils/network';
 import {detail} from '@/store/slices/authSlices';
+import { useRouter } from 'next/navigation';
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import SignatureCanvas from 'react-signature-canvas';
@@ -10,6 +11,7 @@ const SaveSignature = () => {
     const [signatureUrl, setSignatureUrl] = useState(null);
     const auth = useSelector((state) => state.auth)
     const dispatch = useDispatch()
+    const router = useRouter();
 
     useEffect(() => {
         const decodeData = () => {
@@ -19,7 +21,6 @@ const SaveSignature = () => {
                 dispatch(detail(decodedData)); // Assuming `detail` is an action
             }
         };
-
         decodeData();
     }, [dispatch]);
     const { user } = auth.detail;
@@ -42,7 +43,7 @@ const SaveSignature = () => {
                     signature: dataUrl,
                     userId: user.id
                 })
-                console.log(data);
+                router.push('/ui/home')
             }, 2000)
             //   setSignatureUrl(dataUrl);
         } else {

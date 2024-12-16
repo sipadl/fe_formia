@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { redirect } from 'next/navigation';
 
 export default function Inputan({ values = [], url, backUrl }) {
-    console.log(values);
     const router = useRouter();
     const [formData, setFormData] = useState({});
 
