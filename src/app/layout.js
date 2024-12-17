@@ -5,6 +5,8 @@ import { Provider } from 'react-redux'; // Redux Provider
 import store from '../store'; // Import Redux store
 import AppWrapper from './utils/AppWrapper'; // Authenticated/non-authenticated wrapper
 import './globals.css';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+
 
 const Layout = ({ children }) => {
     const metadata = {

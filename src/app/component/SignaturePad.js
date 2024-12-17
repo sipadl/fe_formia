@@ -164,7 +164,7 @@ export default function SignaturePad({
                                 <div className="col-md-4 col-xs-12">
                                     <div className="header-notes-inner mb-2">
                                         <div className='mb-2'>
-                                            Impact : <strong>{val.impact == null ? 'Tidak' : 'Ya'}</strong>
+                                            Impact : <strong>{val.impact == null ? '' : 'Tidak' ? 'Ya' : ''}</strong>
                                         </div>
                                         <hr />
                                         <div>Note :</div>
@@ -195,7 +195,7 @@ export default function SignaturePad({
                                                     Sign
                                                 </button>
                                     }
-                                    <div className="header-notes-inner text-center">{val.name}</div>
+                                    <div className="header-notes-inner text-center">{val.userDetail.namaLengkap}</div>
                                 </div>
                             </React.Fragment>
                             : ''
@@ -252,7 +252,7 @@ export default function SignaturePad({
                                                 Sign
                                             </button>
                                 }
-                                <div className="header-notes-inner text-center">{val.name}</div>
+                                <div className="header-notes-inner text-center">{val.userDetail.namaLengkap}</div>
                             </div>
                         </React.Fragment>
                         : ''

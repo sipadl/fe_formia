@@ -55,7 +55,7 @@ export default function MainAuthLayout({ children, metadata }) {
                     {/* Sidebar */}
                     <nav
                         id="sidebarMenu"
-                        className="col-md-3 col-lg-3 d-md-block bg-dark text-light sidebar collapse show"
+                        className="col-md-2 col-lg-2 d-md-block bg-dark text-light sidebar collapse show"
                         style={{
                             minHeight: isMobile ? 'auto' : '100vh',
                         }}
@@ -112,7 +112,7 @@ export default function MainAuthLayout({ children, metadata }) {
                                                 href="/ui/gh/list"
                                                 className="nav-link btn btn-sm btn-light mx-2 text-start"
                                             >
-                                                Management Group Head
+                                                Management GH
                                             </Link>
                                         </li>
                                         <li className="nav-item">
@@ -146,7 +146,7 @@ export default function MainAuthLayout({ children, metadata }) {
                     </nav>
 
                     {/* Main Content */}
-                    <main className="col-md-9 col-lg-9 px-4 pt-4">{children}</main>
+                    <main className="col-md-10 col-lg-10 px-4 pt-4">{children}</main>
                 </div>
             </div>
         </>

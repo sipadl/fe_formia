@@ -117,12 +117,20 @@ export default function Inputan({ values = [], url, backUrl }) {
             ) : (
                 <p>Please contact support on: 081290669170</p>
             )}
-            <div className='row mb-4'>
-              <div className='col-md-12 text-end'>
-                <Link className='btn btn-md btn-light mx-4' href={backUrl}>Kembali</Link>
-                <button className='btn btn-md btn-dark' type="submit">Submit</button>
-              </div>
+            <>
+            <div className="mt-4">
+            <Button type="submit" label="Submit" severity="Primary"></Button>
+            <Button
+                type="reset"
+                label="Cancel"
+                className="mx-2"
+                severity="Secondary"
+                onClick={() => {
+                router.push({backUrl})
+                }}
+            ></Button>
             </div>
+            </>
         </form>
     );
 }

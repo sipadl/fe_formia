@@ -1,6 +1,7 @@
 'use client'
 import { detail } from '@/store/slices/authSlices';
 import { Field, Form, Formik } from 'formik';
+import { Button } from 'primereact/button';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -150,14 +151,20 @@ export default function page() {
                                         </div>
                                     </div>
 
-                                    <div className="d-flex justify-content-end">
-                                        <button className="btn btn-sm btn-light" type="reset">
-                                        Kembali
-                                        </button>
-                                        <button className="btn btn-sm btn-dark" type="submit">
-                                        Ubah Password
-                                        </button>
+                                    <>
+                                    <div className="mt-4">
+                                    <Button type="submit" label="Submit" severity="Primary"></Button>
+                                    <Button
+                                        type="reset"
+                                        label="Cancel"
+                                        className="mx-2"
+                                        severity="Secondary"
+                                        onClick={() => {
+                                        router.push('/ui/user/list')
+                                        }}
+                                    ></Button>
                                     </div>
+                                    </>
                                     </Form>
                                 )}
                                 </Formik>

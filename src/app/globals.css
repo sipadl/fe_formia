@@ -16,3 +16,8 @@ body {
   bottom: 0;
   width: 100%;
 }
+
+
+.p-datatable .p-datatable-tbody > tr {
+  height: 40px; /* Sesuaikan tinggi baris */
+}

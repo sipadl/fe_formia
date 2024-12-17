@@ -7,31 +7,34 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { dateConverter } from '@/app/utils/ConverterDate';
 import { Button } from 'primereact/button';
-import { useRouter } from 'next/navigation';
+
 
 export default function page() {
 
     const [data, setData] = useState([])
-    const router = useRouter();
     
     useEffect(() => {
         const getListUser = async () => {
-            const dataUser = await fetchData('/api/user/get')
+            const dataUser = await fetchData('/api/main/departement/list')
             setData(dataUser.data)
         }
+
         getListUser();
     }, []);
+    
   return (
     <div>
         <div className='row'>
                     <div className='col-md-6'>
-                        <h3 className='mx-1'>List User</h3>
+                        <h3 className='mx-1'>List Departement</h3>
                     </div>
                     <div className='col-md-6  mx-0 d-flex justify-content-end mb-4'>
                         <div>
-                            <Button severity='primary' label='+ User' onClick={ () => 
-                                router.push('/ui/user/add-user')
-                            }></Button>
+                            <Link
+                                href={'/ui/dh/add-dh'}
+                                >
+                                    <Button severity='primary' label='+ Departement'></Button>
+                            </Link>
                         </div>
                     </div>
                     <div className='border'>
@@ -49,18 +52,9 @@ export default function page() {
                             // style={{ width: '10%' }}
                         ></Column>
                         <Column 
-                            field="namaLengkap" 
+                            field="departementName" 
                             sortable 
-                            header="Nama Lengkap" 
-                            // style={{ width: '30%' }}
-                        ></Column>
-                        <Column 
-                            field="departement" 
-                            sortable 
-                            header="Departement"
-                            body={(rows) => {
-                                return rows.departement.departementName;
-                            }} 
+                            header="Departement" 
                             // style={{ width: '30%' }}
                         ></Column>
                         <Column 
@@ -85,28 +79,21 @@ export default function page() {
                             field="createdAt" 
                             sortable 
                             header="Tanggal Buat" 
-                            body={(datax) => {
-                                return dateConverter(datax.createdAt)
-                            }}
+                            body={(val) => (
+                                dateConverter(val.createdAt)
+                            )}
                             // style={{ width: '30%' }}
-                        ></Column>
-                        <Column
-                        field="role" 
-                        sortable 
-                        header="Role" 
-                        body={(datax) => {
-                            return datax.role.name
-                        }}
                         ></Column>
                         <Column
                         header="Aksi"
                         body={(rowData) => (
-                            <Link href={`/ui/user/edit/${rowData.id}`} >
+                            <Link href={`/ui/dh/edit/${rowData.id}`}>
                                 <Button severity='primary' label='Ubah'></Button>
                             </Link>
                         )}
                         ></Column>
                     </DataTable>
+
                     </div>
                 </div>
     </div>

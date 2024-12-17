@@ -36,78 +36,78 @@ export default function page() {
                         title: 'Title',
                         name: 'title',
                         tipe: 0,
-                        output: detail.title || ''
+                        output: detail ? detail.title : ''
                     }, {
                         title: 'No Redmine',
                         name: 'redmineNo',
                         customTipe:'number',
                         tipe: 0,
-                        output: detail.redmineNo
+                        output: detail ? detail.redmineNo : ''
                     }, {
                         title: 'Tipe',
                         name: 'tipeIa',
                         tipe: 0,
-                        output: detail.tipeIa == 0 ? 'Unregister' : detail.tipeIa == 1 ? 'Incident' : 'Project'
+                        output: detail ? detail.tipeIa == 0 ? 'Unregister' : detail.tipeIa == 1 ? 'Incident' : 'Project' : ''
                     }, {
                         title: 'Changes Area',
                         name: 'changes',
                         tipe: 0,
-                        output: detail.changes 
+                        output: detail ? detail.changes  : ''
                     }, {
                         title: 'Existing Flow',
                         name: 'existingFlow',
                         tipe: 1,
-                        output: detail.existingFlow 
+                        output: detail ? detail.existingFlow  : ''
                     }, {
                         title: 'Changes Flow',
                         name: 'changesFlow',
                         tipe: 1,
-                        output: detail.changesFlow
+                        output: detail ? detail.changesFlow : ''
                     }, {
                         title: 'Testing Requirements',
                         name: 'testingRequirement',
                         tipe: 1,
-                        output: detail.testingRequirement
+                        output: detail ? detail.testingRequirement : ''
                     }, {
                         title: 'UAT ENV. DATA NEEDS',
                         name: 'envData',
                         tipe: 1,
-                        output: detail.envData
+                        output: detail ? detail.envData : ''
                     }, {
                         title: 'data testing',
                         name: 'dataTesting',
                         tipe: 1,
-                        output: detail.dataTesting
+                        output: detail ? detail.dataTesting : ''
                     }, {
                         title: 'setup parameter',
                         name: 'parameter',
                         tipe: 1,
-                        output: detail.parameter
+                        output: detail ? detail.parameter : ''
                     }, {
                         title: 'changes of existing structure file',
                         name: 'existingStructureFile',
                         tipe: 1,
-                        output: detail.existingStructureFile
+                        output: detail ? detail.existingStructureFile : ''
                     }, {
                         title: 'changes of database',
                         name: 'database',
                         tipe: 1,
-                        output: detail.database
+                        output: detail ? detail.database : ''
                     }, {
                         title: 'rekomended action / testing',
                         name: 'recomendedAction',
                         tipe: 1,
-                        output: detail.recomendedAction
+                        output: detail ? detail.recomendedAction : ''
                     },  {
                         title: 'Downtime required',
                         name: 'downTime',
                         tipe: 0,
-                        output: detail.downTime ? 'Yes' : 'No'
+                        output: detail ? detail.downTime ? 'Yes' : 'No' : ''
                     }, {
                         title: 'Downtime message',
                         name: 'downTimeMsg',
                         tipe: 0,
-                        output: detail.downTimeMsg
+                        output: detail ? detail.downTimeMsg : ''
                     }
                 ]}/>
                 <SignaturePad values={groupHead} redmine={id} />
