@@ -1,23 +1,51 @@
 'use client'
-import { Formik } from 'formik'
+import { detail, login } from '@/store/slices/authSlices'
+import { Field, Formik } from 'formik'
 import Image from 'next/image'
-import { postData, postDataWithoutAuth } from '../utils/network'
 import { useRouter } from 'next/navigation'
+import { Button } from 'primereact/button'
+import { InputText } from 'primereact/inputtext'
 import { useDispatch } from 'react-redux'
-import { login, detail } from '@/store/slices/authSlices'
+import { postDataWithoutAuth } from '../utils/network'
+import { FloatLabel } from 'primereact/floatlabel'
+import { useEffect, useState } from 'react'
+import ToastPopup from './ToastPopup'
+import { Message } from 'primereact/message'
 
 
 export default function MainNonAuthLayout() {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    // const {user} = 
+    const [error, setError] = useState(null);
+    const [isToastVisible, setToastVisible] = useState(false);
+
+    const handleError = (message) => {
+        setError(message);  // Trigger the error
+        setToastVisible(true);  // Show the toast
+      };
+
+    useEffect(() => {
+        if (error && isToastVisible) {
+            setError(null);  // Clear the error after 3 seconds
+            setToastVisible(false);  // Hide the toast
+          // Clean up the timeout when the component unmounts or error changes
+      }
+    }, [error, isToastVisible])
+
     return (
-        <> <div className = "container vh-100 d-flex align-items-center justify-content-center" > <div
+        <> 
+        {error && isToastVisible && <ToastPopup message={error} severity="error" />}
+        <div className = "container vh-100 d-flex align-items-center justify-content-center" > <div
             className="row w-100 shadow-lg p-4 rounded">
 
             <div className="col-md-6 d-flex flex-column justify-content-center">
-                <h2 className="mb-4">Login</h2>
+                <h2 className="mb-5">Login</h2>
+                <div className="mb-4">
+                {error && 
+                <Message severity="error" text={error.message} className="w-100" />
+                }
+                </div>
                 <Formik
                     initialValues={{
                         username: '',
@@ -35,19 +63,20 @@ export default function MainNonAuthLayout() {
                     onSubmit={(values, {setSubmitting}) => {
                         setSubmitting(true);
                         setTimeout( async () => {
-                            try {
+                                setError('');
                                 const response = await postDataWithoutAuth('/api/auth/login', values);
-                                // console.log(response.data.token);
-                                sessionStorage.setItem('_token', response.data.token)
-                                sessionStorage.setItem('_cookie', btoa(JSON.stringify(response.data)))
-                                dispatch(login({detail:response.data}))
-                                dispatch(detail(response.data))
-                                setSubmitting(false);
-                                router.push('/ui/home');
-                            } catch (err) {
-                                console.warn(err);
-                                setSubmitting(false)
-                            }
+                                if(response.status === 200 ){
+                                    sessionStorage.setItem('_token', response.data.token)
+                                    sessionStorage.setItem('_cookie', btoa(JSON.stringify(response.data)))
+                                    dispatch(login({detail:response.data}))
+                                    dispatch(detail(response.data))
+                                    setSubmitting(false);
+                                    router.push('/ui/home');
+                                } else {
+                                    setError(response.response.data)
+                                    setSubmitting(false);
+                                }
+                           
                         }, 400);
                     }}>
                     {
@@ -62,24 +91,39 @@ export default function MainNonAuthLayout() {
                             /* and other goodies */
                         }) => (
                             <form onSubmit={handleSubmit}>
-                                <input
+                                <div className="mb-4">
+                                <FloatLabel>
+                                <Field
+                                className="w-100"
                                     type="text"
                                     name="username"
-                                    className='form-control mb-3'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.username}/> {errors.username && touched.username && errors.username}
-                                <input
-                                    className='form-control mb-3'
+                                    value={values.username}
+                                    as={InputText}
+                                    required
+                                    /> 
+                                <label htmlFor="username">Username</label>
+                                </FloatLabel>
+                                {errors.username && touched.username && errors.username}
+                                </div>
+                                <div className='mb-4'>
+                                <FloatLabel>
+                                <Field
+                                className="w-100"
+                                    required
                                     type="password"
                                     name="password"
                                     onChange={handleChange}
+                                    as={InputText}
                                     onBlur={handleBlur}
-                                    value={values.password}/> {errors.password && touched.password && errors.password}
+                                    value={values.password}/> 
+                                    <label htmlFor="password">Password</label>
+                                    {errors.password && touched.password && errors.password}
+                                </FloatLabel>
+                                </div>
                                 <div className='text-end w-100'>
-                                    <button type="submit" className='btn btn-dark w-100' disabled={isSubmitting}>
-                                        Login
-                                    </button>
+                                    <Button severity='dark' label='Login' className='w-100'></Button>
                                 </div>
                             </form>
                         )

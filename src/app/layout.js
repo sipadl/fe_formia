@@ -6,6 +6,8 @@ import store from '../store'; // Import Redux store
 import AppWrapper from './utils/AppWrapper'; // Authenticated/non-authenticated wrapper
 import './globals.css';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import 'primeicons/primeicons.css';
+        
 
 
 const Layout = ({ children }) => {

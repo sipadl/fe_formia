@@ -107,7 +107,7 @@ export default function page() {
                         title: 'Downtime message',
                         name: 'downTimeMsg',
                         tipe: 0,
-                        output: detail ? detail.downTimeMsg : ''
+                        output: detail ? detail.downTimeMsg : detail.downTimeMsg != '' ? detail.downTimeMsg : '0'
                     }
                 ]}/>
                 <SignaturePad values={groupHead} redmine={id} />

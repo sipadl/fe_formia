@@ -33,14 +33,12 @@ export default function Page() {
             <div className="h4 mb-3">Tambah Group Head</div>
             <Formik
                 initialValues={{
-                    name: '',
                     departement: null,
                     akunTerkait: null,
                     position: null,
                 }}
                 validate={(values) => {
                     const errors = {};
-                    if (!values.name) errors.name = 'Nama Group Head is required';
                     if (!values.departement) errors.departement = 'Departement is required';
                     if (!values.akunTerkait) errors.akunTerkait = 'Akun Terkait is required';
                     if (!values.position) errors.position = 'Position is required';
