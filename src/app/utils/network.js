@@ -75,7 +75,6 @@ export const postData = async (url, data) => {
                 'Authorization': `Bearer ${yourToken}`
             }
         });
-        console.log(response);
         if (response.status === 403) {
             window.location.replace('/ui');
         }
