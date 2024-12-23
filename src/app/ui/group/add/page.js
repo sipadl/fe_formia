@@ -13,48 +13,39 @@ export default function Page() {
     const [departement, setDepartement] = useState([]);
     const [listUser, setListUser] = useState([]);
 
-    useEffect(() => {
-        const getDepartement = async () => {
-            const datadepartement = await fetchData('/api/main/departement/list');
-            setDepartement(datadepartement.data);
-        };
+    // useEffect(() => {
+    //     const getDepartement = async () => {
+    //         const datadepartement = await fetchData('/api/main/departement/list');
+    //         setDepartement(datadepartement.data);
+    //     };
 
-        const getUser = async () => {
-            const dataUser = await fetchData('/api/user/get');
-            setListUser(dataUser.data);
-        };
+    //     const getUser = async () => {
+    //         const dataUser = await fetchData('/api/user/get');
+    //         setListUser(dataUser.data);
+    //     };
 
-        getDepartement();
-        getUser();
-    }, []);
+    //     getDepartement();
+    //     getUser();
+    // }, []);
 
     return (
         <div>
-            <div className="h4 mb-3">Tambah Group Head</div>
+            <div className="h4 mb-3">Tambah Group</div>
             <Formik
                 initialValues={{
-                    departement: null,
-                    akunTerkait: null,
-                    position: null,
+                    name: '',
+                    position: '',
                 }}
                 validate={(values) => {
                     const errors = {};
-                    if (!values.departement) errors.departement = 'Departement is required';
-                    if (!values.akunTerkait) errors.akunTerkait = 'Akun Terkait is required';
+                    if (!values.name) errors.name = 'Nama is required';
                     if (!values.position) errors.position = 'Position is required';
                     return errors;
                 }}
                 onSubmit={async (values) => {
                     try {
-                        const mainBody = {
-                            departementId: values.departement,
-                            userId: values.akunTerkait,
-                            name: values.name,
-                            position: values.position
-                        }
-                        const submit = await postData('/api/main/gh/add', mainBody);
-                        console.log(submit);
-                        router.push('/ui/gh/list');
+                        const submit = await postData('/api/main/group/new', values);
+                        router.push('/ui/group/list');
                     } catch (error) {
                         console.error('Submission error:', error);
                     }
@@ -63,7 +54,7 @@ export default function Page() {
                 {({ handleSubmit, setFieldValue, values, errors, touched }) => (
                     <form onSubmit={handleSubmit}>
                         {/* Nama Field */}
-                        {/* <div className="form-group mb-4">
+                        <div className="form-group mb-4">
                             <label className="mb-2">Nama</label>
                             <InputText
                                 className={`w-100 ${errors.name && touched.name ? 'p-invalid' : ''}`}
@@ -75,9 +66,9 @@ export default function Page() {
                             {errors.name && touched.name && (
                                 <small className="p-error">{errors.name}</small>
                             )}
-                        </div> */}
+                        </div>
                         {/* Departement Dropdown */}
-                        <div className="form-group mb-4">
+                        {/* <div className="form-group mb-4">
                             <label className="mb-2">Departement</label>
                             <Dropdown
                                 className={`w-100 ${errors.departement && touched.departement ? 'p-invalid' : ''}`}
@@ -92,10 +83,10 @@ export default function Page() {
                             {errors.departement && touched.departement && (
                                 <small className="p-error">{errors.departement}</small>
                             )}
-                        </div>
+                        </div> */}
 
                         {/* Akun Terkait Dropdown */}
-                        <div className="form-group mb-4">
+                        {/* <div className="form-group mb-4">
                             <label className="mb-2">Akun Terkait</label>
                             <Dropdown
                                 className={`w-100 ${errors.akunTerkait && touched.akunTerkait ? 'p-invalid' : ''}`}
@@ -110,7 +101,7 @@ export default function Page() {
                             {errors.akunTerkait && touched.akunTerkait && (
                                 <small className="p-error">{errors.akunTerkait}</small>
                             )}
-                        </div>
+                        </div> */}
 
                         {/* Posisi Dropdown */}
                         <div className="form-group mb-4">

@@ -110,10 +110,10 @@ export default function MainAuthLayout({ children, metadata }) {
                                         </li>
                                         <li className="nav-item">
                                             <Link
-                                                href="/ui/gh/list"
+                                                href="/ui/group/list"
                                                 className="nav-link btn btn-sm btn-light mx-2 text-start"
                                             >
-                                                Management GH
+                                                Management Group
                                             </Link>
                                         </li>
                                         <li className="nav-item">

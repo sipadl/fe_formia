@@ -232,7 +232,9 @@ export default function ProfilePage() {
                                 }
                                 const response = await postData('/api/auth/ubah-password', mainBody)
                                 if(response.status === 200){
-                                    dispatch(logout());
+                                    setTimeout(() => {
+                                    dispatch(logout())
+                                },3000)
                                 }
                                 handleError(response);
                             }}>
