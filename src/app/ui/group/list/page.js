@@ -15,26 +15,27 @@ export default function page() {
     
     useEffect(() => {
         const getListUser = async () => {
-            const dataUser = await fetchData('/api/main/gh/list')
+            const dataUser = await fetchData('/api/main/group/list')
             setData(dataUser.data)
         }
 
         getListUser();
     }, []);
     
+
   return (
     <div>
         <div className='row'>
                     <div className='col-md-6'>
-                        <h3 className='mx-1'>List group Head</h3>
+                        <h3 className='mx-1'>List Group</h3>
                     </div>
                     <div className='col-md-6  mx-0 d-flex justify-content-end mb-4'>
                         <div>
                             <Link
-                                href={'/ui/gh/add-gh'}
+                                href={'/ui/group/add'}
                                 >
                                     <Button severity='primary' label='
-                                    + Group Head
+                                    + Group
                                     '></Button>
                                     </Link>
                         </div>
@@ -59,18 +60,10 @@ export default function page() {
                             header="Nama" 
                             // style={{ width: '30%' }}
                             body={(val) => (
-                                val.user ? val.user.namaLengkap : ''
+                                val.name
                             )}
                         ></Column>
-                        <Column 
-                            field="departement" 
-                            sortable 
-                            header="Departement" 
-                            body={(val) => (
-                                val.departement ? val.departement.departementName : ''
-                            )}
-                            // style={{ width: '30%' }}
-                        ></Column>
+                       
                         <Column 
                             header="Status" 
                             body={(rowData) => (
@@ -101,7 +94,7 @@ export default function page() {
                         <Column
                         header="Aksi"
                         body={(rowData) => (
-                            <Link href={`/ui/gh/edit/${rowData.id}`} >
+                            <Link href={`/ui/group/edit/${rowData.id}`} >
                                  <Button severity='primary' label='Ubah'></Button>
                             </Link>
                         )}

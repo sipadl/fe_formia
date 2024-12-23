@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     async redirects() {
+        
         return [
             {
                 source: '/', // The route to redirect from
@@ -10,5 +11,6 @@ const nextConfig = {
         ];
     },
 };
+
 
 export default nextConfig;

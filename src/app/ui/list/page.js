@@ -28,7 +28,7 @@ export default function Page() {
     useEffect(() => {
         const fetchDataAsync = async () => {
             try {
-                const response = await fetchData('/api/ia/list?size=300&sort=id,createdAt');
+                const response = await fetchData('/api/ia/list?size=300&sort=id,createdAt&mode=user');
                 // Format data sesuai kebutuhan
                 const formattedData = response.data.content.map((item, index) => ({
                     key: index + 1,
@@ -113,10 +113,12 @@ export default function Page() {
                         <Column 
                             field="title" 
                             header="Judul" 
+                            // style={{ width: '30%' }}
                         ></Column>
                         <Column 
                             field="creator" 
                             header="Pembuat" 
+                            // style={{ width: '30%' }}
                         ></Column>
                         <Column 
                             header="Status" 
@@ -133,6 +135,7 @@ export default function Page() {
                                     {rowData.status == 'Active' ? 'Aktif' : 'Tidak Aktif'}
                                 </span>
                             )} 
+                            // style={{ width: '30%' }}
                         ></Column>
                         <Column 
                             field="createdAt" 
@@ -148,6 +151,9 @@ export default function Page() {
                             <>
                             <Link href={`/ui/home/details/${rowData.id}`}>
                                 <Button severity='primary' label='Detail' className='mx-1'></Button>
+                            </Link>
+                            <Link href={`/ui/home/details/${rowData.id}`}>
+                                <Button severity='warning' label='Ubah' className='mx-1'></Button>
                             </Link>
                             </>
                         )}

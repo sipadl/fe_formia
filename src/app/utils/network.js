@@ -2,8 +2,6 @@
 import axios from 'axios'
 
 
-
-
 const baseUrl = 'http://localhost:8080'; // Backend base URL
 const yourToken = sessionStorage.getItem('_token')
 const mainHeader = {
@@ -24,7 +22,7 @@ export const postDataWithoutHead = async (url) => {
             }
         });
         if(response.status === 403) {
-          window.location.replace('/ui')
+            window.location.replace('/ui')
         }
         return response.data;
     } catch (error) {
@@ -76,25 +74,14 @@ export const postData = async (url, data) => {
                 'Accept': 'application/hal+json',
                 'Authorization': `Bearer ${yourToken}`
             }
-        });    
-        // Redirect jika status code adalah 403
+        });
+        console.log(response);
         if (response.status === 403) {
             window.location.replace('/ui');
         }
         return response.data;
-    
     } catch (err) {
-        console.log(err);
-        if(err.status == 401 ){
-            // window.location.replace('/ui');
-            // sessionStorage.clear();
-            // localStorage.clear()
-        } else if (err.request) {
-            console.error('No response received:', err.request);
-        } else {
-            console.error('Error setting up request:', err.message);
-        }
-        throw err; // Rethrow the error if necessary
+        return err.response.data; // Rethrow the error if necessary
     }    
 };
 
@@ -108,25 +95,6 @@ export const postDataWithoutAuth = async (url, data) => {
         }
         return response.data;
     } catch (err) {
-        if (err.response == 'ERR_NETWORK') {
-            // Mendapatkan status code dari response
-            const statusCode = err.response.status;
-            console.warn('Response data:', err.response.data);
-            console.warn('Status:', statusCode);
-            console.warn('Headers:', err.response.headers);
-            // Contoh penanganan berdasarkan status code
-            if (statusCode === 403) {
-                window.location.replace('/ui');
-            } else if (statusCode === 404) {
-                console.error('Resource not found.');
-            } else if (statusCode === 500) {
-                console.error('Server error.');
-            }
-        } else if (err.request) {
-            console.error('No response received:', err.request);
-        } else {
-            console.error('Error setting up request:', err.message);
-        }
-        throw err; // Rethrow the error if necessary
+        return err; // Rethrow the error if necessary
     }    
 };

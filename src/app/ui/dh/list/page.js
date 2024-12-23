@@ -57,6 +57,15 @@ export default function page() {
                             header="Departement" 
                             // style={{ width: '30%' }}
                         ></Column>
+                         <Column 
+                                field="group" 
+                                sortable 
+                                header="Group" 
+                                body={(val) => (
+                                    val.group ? val.group.name : ''
+                                )}
+                                // style={{ width: '30%' }}
+                            ></Column>
                         <Column 
                             header="Status" 
                             body={(rowData) => (

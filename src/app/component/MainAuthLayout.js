@@ -2,9 +2,9 @@
 import { logout } from '@/store/slices/authSlices';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { Toast } from 'primereact/toast'; // Import the Toast component from PrimeReact
 
 export default function MainAuthLayout({ children, metadata }) {
     const router = useRouter();
@@ -12,6 +12,7 @@ export default function MainAuthLayout({ children, metadata }) {
     const auth = useSelector((state) => state.auth);
 
     const [isMobile, setIsMobile] = useState(false);
+    const toast = useRef(null); // Create a ref for the Toast component
 
     useEffect(() => {
         // Function to check if the screen is mobile
@@ -27,8 +28,8 @@ export default function MainAuthLayout({ children, metadata }) {
         };
     }, []);
 
-
     const { user } = auth.detail;
+
     return (
         <>
             <header className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -109,10 +110,10 @@ export default function MainAuthLayout({ children, metadata }) {
                                         </li>
                                         <li className="nav-item">
                                             <Link
-                                                href="/ui/gh/list"
+                                                href="/ui/group/list"
                                                 className="nav-link btn btn-sm btn-light mx-2 text-start"
                                             >
-                                                Management GH
+                                                Management Group
                                             </Link>
                                         </li>
                                         <li className="nav-item">

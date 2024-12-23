@@ -1,136 +1,143 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import EditorConvertToHTML from './EditorConvertToHTML';  // Ensure correct import path
-import { postData } from '../utils/network';
-import { useRouter } from 'next/navigation';
-import { redirect } from 'next/navigation';
+'use client'
+import React, { Component } from 'react';
+import EditorConvertToHTML from './EditorConvertToHTML'; // Assuming this is the editor component used
 
-export default function Inputan({ values = [], url, backUrl }) {
-    const router = useRouter();
-    const [formData, setFormData] = useState({});
+// Komponen Label
+class Label extends Component {
+    render() {
+        const { title } = this.props;
+        return (
+            <label className="label-form-col col-md-4">
+                <div className='bg-dark text-light p-1'>
+                    {title.toUpperCase()}
+                </div>
+            </label>
+        );
+    }
+}
 
-    useEffect(() => {
-        let isMounted = true;
-        
-        if (values.length > 0 && isMounted) {
-            const initialData = values.reduce((acc, val) => ({
-                ...acc,
-                [val.name]: ''
-            }), {});
-            setFormData(initialData);
-        }
-    
-        return () => {
-            isMounted = false;
+// Komponen Input Text
+class TextInput extends Component {
+    render() {
+        const { name, customTipe, value, onChange, placeholder } = this.props;
+        return (
+            <input
+                type={customTipe || 'text'}
+                className="form-control"
+                name={name}
+                value={value}
+                onChange={(e) => onChange(name, e.target.value)}
+                placeholder={placeholder}
+            />
+        );
+    }
+}
+
+// Komponen Editor
+class EditorInput extends Component {
+    render() {
+        const { name, content, onContentChange } = this.props;
+        return (
+            <EditorConvertToHTML
+                name={name}
+                content={content}
+                onContentChange={onContentChange}
+            />
+        );
+    }
+}
+
+// Komponen Select
+class SelectInput extends Component {
+    render() {
+        const { name, value, onChange, options, isMulti } = this.props;
+        return (
+            <select
+                className="form-control"
+                name={name}
+                value={value}
+                onChange={(e) => onChange(name, e.target.value)}
+                multiple={isMulti || false}
+            >
+                {!isMulti && <option value="">Pilih salah satu</option>}
+                {options.map((option) => (
+                    <option key={option.id} value={option.id}>
+                        {option.name}
+                    </option>
+                ))}
+            </select>
+        );
+    }
+}
+
+// Komponen Utama Form
+class DynamicForm extends Component {
+    constructor(props) {
+        super(props);
+        // const { value } = this.pros ?? '';
+        this.state = {
+            formData: {},
+            values: this.props.values
         };
-    }, [values]);
-    
+    }
 
-    const handleChange = (name, value, isMulti = false) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: isMulti ? value.join(', ') : value, // Join array values as a comma-separated string if `isMulti` is true
+    handleChange = (name, value) => {
+        this.setState((prevState) => ({
+            formData: {
+                ...prevState.formData,
+                [name]: value,
+            },
         }));
     };
 
-    const handleSubmit =  async (e) => {
-        e.preventDefault();
-        // setTimeout(async () => {
-            const resp = await postData(url, formData)
-            console.log(resp);
-            router.push('/ui/home')
-            if(resp.status == 200 ){
-                redirect(`${backUrl}`)
-            } else {
-                console.log(resp);
-            }
-        // }, 3000)
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            {values.length > 0 ? (
-                values.map((val, key) => (
+    render() {
+        const {formData} = this.state;
+        const { values } = this.state
+        return (
+            <form>
+                {values.map((val, key) => (
                     <div key={key} className="form-group row mb-3">
-                        <label className="label-form-col col-md-4">
-                            <div className='bg-dark text-light p-1'>
-                            {val.title.toUpperCase()}
-                            </div>
-                        </label>
+                        <Label title={val.title} />
                         <div className="col-md-8">
-                            {val.tipe === 1 ? (
-                                <EditorConvertToHTML
+                            {val.tipe === 0 && (
+                                <TextInput
                                     name={val.name}
-                                    content={formData[val.name] || null}  // Pass initial content if any
-                                    onContentChange={(name, content) => handleChange(name, content)}
+                                    customTipe={val.customTipe}
+                                    value={formData[val.name] || ''}
+                                    onChange={this.handleChange}
+                                    placeholder={`Masukan ${val.title}`}
                                 />
-                            ) : val.tipe === 2 ? (
-                                <select
-                                    className="form-control"
-                                    multiple={val.isMulti}
+                            )}
+
+                            {val.tipe === 1 && (
+                                <EditorInput
                                     name={val.name}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            val.name,
-                                            val.isMulti
-                                                ? Array.from(e.target.selectedOptions, option => option.value) // Convert to array if multiple
-                                                : e.target.value,
-                                            val.isMulti
-                                        )
-                                    }
-                                    value={val.isMulti ? formData[val.name] || [] : formData[val.name] || ''} // Ensure array for multiple
-                                >
-                                    {val.element.map((valx, keyx) => (
-                                        <option key={keyx} value={valx.id}>{valx.name}</option>
-                                    ))}
-                                </select>
-                            ) : val.tipe === 0 ? (
-                                <input
-                                    className="form-control"
-                                    type="text"
+                                    content={formData[val.name] || ''}
+                                    onContentChange={this.handleChange}
+                                />
+                            )}
+
+                            {val.tipe === 2 && (
+                                <SelectInput
                                     name={val.name}
                                     value={formData[val.name] || ''}
-                                    onChange={(e) => handleChange(val.name, e.target.value)}
-                                    placeholder={val.title.toUpperCase()}
-                                    required
+                                    onChange={this.handleChange}
+                                    options={val.element}
+                                    isMulti={val.isMulti}
                                 />
-                            ) : val.tipe === 3 ? (
-                                val.option.map((valo, keys) => (
-                                    <div key={keys}>
-                                        <input
-                                            className="mx-1"
-                                            type="radio"
-                                            id={valo.id}
-                                            name={val.name}
-                                            value={valo.option}
-                                            checked={formData[val.name] === valo.option}
-                                            onChange={() => handleChange(val.name, valo.option)}
-                                        />
-                                        <label htmlFor={valo.id}>{valo.name.toUpperCase()}</label>
-                                    </div>
-                                ))
-                            ) : null}
+                            )}
                         </div>
                     </div>
-                ))
-            ) : (
-                <p>Please contact support on: 081290669170</p>
-            )}
-            <>
-            <div className="mt-4">
-            <Button type="submit" label="Submit" severity="Primary"></Button>
-            <Button
-                type="reset"
-                label="Cancel"
-                className="mx-2"
-                severity="Secondary"
-                onClick={() => {
-                router.push({backUrl})
-                }}
-            ></Button>
-            </div>
-            </>
-        </form>
-    );
+                ))}
+
+                <div className="d-flex justify-content-end mt-4">
+                    <button type="submit" className="btn btn-primary btn-sm">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        );
+    }
 }
+
+export default DynamicForm;
