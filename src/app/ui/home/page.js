@@ -19,10 +19,7 @@ export default function Page() {
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        'country.name': { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        representative: { value: null, matchMode: FilterMatchMode.IN },
-        status: { value: null, matchMode: FilterMatchMode.EQUALS },
-        verified: { value: null, matchMode: FilterMatchMode.EQUALS }
+        status: { value: null, matchMode: FilterMatchMode.EQUALS }
     });
 
     useEffect(() => {
@@ -87,6 +84,9 @@ export default function Page() {
         <Box sx={{ padding: 2 }}>
             <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={2}>
                 <Typography variant="h5">List Impact Analisis</Typography>
+                <Link href={'/ui/home/add-new-ia'} >
+                <Button label='+ Impact Analisis' severity='primary'></Button>
+                </Link>
             </Box>
             <div className='border'>
             <DataTable

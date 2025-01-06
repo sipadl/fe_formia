@@ -4,7 +4,7 @@ import { fetchData } from '@/app/utils/network';
 import { useEffect, useState } from 'react';
 
 
-export default function page() {
+export default function Page() {
     const router = window.location.pathname.split('/');
     const id = router[4] || 1;
     const [detail, setDetail] = useState({});

@@ -9,7 +9,7 @@ import { dateConverter } from '@/app/utils/ConverterDate';
 import { Button } from 'primereact/button';
 import { useRouter } from 'next/navigation';
 
-export default function page() {
+export default function Page() {
 
     const [data, setData] = useState([])
     const router = useRouter();

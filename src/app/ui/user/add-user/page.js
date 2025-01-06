@@ -9,7 +9,7 @@ import { FloatLabel } from 'primereact/floatlabel'
 import { InputText } from 'primereact/inputtext'
 import { useEffect, useState } from 'react'
 
-export default function page() {
+export default function Page() {
 
   const [departement, setDepartement] = useState([])
   const [role, setRole] = useState([])
