@@ -52,11 +52,11 @@ export default function Page() {
             if (!session) {
                 setSession(true);
             }
-            if (rows.length === 0) {
+            if (!rows) {
                 fetchDataAsync();
             }
         }
-    }, [session]);
+    }, [session, rows]);
 
 
     const onGlobalFilterChange = (e) => {

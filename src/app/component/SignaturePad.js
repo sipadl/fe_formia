@@ -4,6 +4,7 @@ import React, {useState, useRef} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import SignatureCanvas from 'react-signature-canvas';
 import {postData} from '../utils/network';
+import Image from 'next/image';
 
 function convertToDDMMYYYY(dateString) {
     const date = new Date(dateString);
@@ -184,7 +185,7 @@ export default function SignaturePad({
                                                 objectPosition: 'center',
                                                 height: '100px',
                                             }}>
-                                            <img src={val.signature} alt="Review" className="signature-preview mt-2"/>
+                                            <Image src={val.signature} width={100} height={100} alt="Review" className="signature-preview mt-2"/>
                                             </div> 
                                             <div className="header-notes-inner text-start">Date: {convertToDDMMYYYY(val.createdAt)}</div>
                                                 </>
@@ -241,7 +242,7 @@ export default function SignaturePad({
                                             objectPosition: 'center',
                                             height: '100px',
                                         }}>
-                                        <img src={val.signature} alt="Review" className="signature-preview mt-2"/>
+                                        <Image src={val.signature} width={100} height={100} alt="Review" className="signature-preview mt-2"/>
                                         </div> 
                                         <div className="header-notes-inner text-start">Date: {convertToDDMMYYYY(val.createdAt)}</div>
                                             </>

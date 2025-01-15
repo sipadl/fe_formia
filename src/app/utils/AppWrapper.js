@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MainAuthLayout, MainNonAuthLayout } from '../component';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 
 const AppWrapper = ({ children , meta}) => {
     const dispatch = useDispatch();

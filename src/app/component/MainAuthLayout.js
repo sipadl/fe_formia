@@ -2,153 +2,123 @@
 import { logout } from '@/store/slices/authSlices';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Toast } from 'primereact/toast'; // Import the Toast component from PrimeReact
+import { PanelMenu } from 'primereact/panelmenu';
+import { Button } from 'primereact/button';
 
 export default function MainAuthLayout({ children, metadata }) {
     const router = useRouter();
     const dispatch = useDispatch();
     const auth = useSelector((state) => state.auth);
-
-    const [isMobile, setIsMobile] = useState(false);
-    const toast = useRef(null); // Create a ref for the Toast component
-
-    useEffect(() => {
-        // Function to check if the screen is mobile
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768); // Threshold for mobile
-        };
-
-        handleResize(); // Check on initial render
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
     const { user } = auth.detail;
+
+    const menuItems = [
+        {
+            label: 'Home',
+            command: () => router.push('/ui/home')
+        },
+        {
+            label: 'List',
+            command: () => router.push('/ui/list')
+        },
+        {
+            label: 'Profile',
+            command: () => router.push('/ui/profile')
+        },
+        {
+            label: 'Signature',
+            command: () => router.push('/ui/signature')
+        },
+    ];
+
+    const adminMenuItems = [
+        {
+            label: 'Management User',
+            command: () => router.push('/ui/user/list')
+        },
+        {
+            label: 'Management Group',
+            command: () => router.push('/ui/group/list')
+        },
+        {
+            label: 'Management Department',
+            command: () => router.push('/ui/dh/list')
+        },
+    ];
 
     return (
         <>
-            <header className="navbar navbar-expand-lg navbar-dark bg-dark">
+            {/* Navbar */}
+            <header className="navbar navbar-expand-lg navbar-dark p-3 bg-dark">
                 <div className="container-fluid">
                     <Link href="/ui/home" className="navbar-brand mx-4">
                         {metadata.title}
                     </Link>
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#sidebarMenu"
-                        aria-controls="sidebarMenu"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
                 </div>
             </header>
 
-            <div className="container-fluid m-0 p-0">
-                <div className="row g-0">
-                    {/* Sidebar */}
-                    <nav
-                        id="sidebarMenu"
-                        className="col-md-2 col-lg-2 d-md-block bg-dark text-light sidebar collapse show"
+            {/* Main Layout with PanelMenu on the left */}
+            <div className="d-flex" style={{ height: '100vh', display: 'flex'}}>
+                {/* Panel Menu (sidebar) */}
+                <div
+                    style={{
+                        width: '20%',
+                        minHeight: '100vh',
+                        backgroundColor: '#f4f5f7',
+                        padding: '18px',  // Add padding around the sidebar for spacing
+                    }}
+                >
+                    <h4 className="text-center">Menu</h4>
+                    <PanelMenu
+                        model={menuItems}
                         style={{
-                            minHeight: isMobile ? 'auto' : '100vh',
+                            marginBottom: '15px',  // Reduce the bottom margin for tighter spacing
+                            padding: '0',  // Remove padding for a compact look
                         }}
-                    >
-                        <div className="position-sticky pt-3">
-                            <h5 className="px-3">Menu</h5>
-                            <ul className="nav flex-column">
-                                <li className="nav-item">
-                                    <Link
-                                        href="/ui/home"
-                                        className="nav-link btn btn-sm btn-light mx-2 text-start"
-                                    >
-                                        Home
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link
-                                        href="/ui/list"
-                                        className="nav-link btn btn-sm btn-light mx-2 text-start"
-                                    >
-                                        List
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link
-                                        href="/ui/profile"
-                                        className="nav-link btn btn-sm btn-light mx-2 text-start"
-                                    >
-                                        Profile
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link
-                                        href="/ui/signature"
-                                        className="nav-link btn btn-sm btn-light mx-2 text-start"
-                                    >
-                                        Signature
-                                    </Link>
-                                </li>
-                                {user.role.name === 'ADMIN' && (
-                                    <>
-                                        <hr className="mx-3" />
-                                        <h5 className="px-3">Admin</h5>
-                                        <li className="nav-item">
-                                            <Link
-                                                href="/ui/user/list"
-                                                className="nav-link btn btn-sm btn-light mx-2 text-start"
-                                            >
-                                                Management User
-                                            </Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link
-                                                href="/ui/group/list"
-                                                className="nav-link btn btn-sm btn-light mx-2 text-start"
-                                            >
-                                                Management Group
-                                            </Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link
-                                                href="/ui/dh/list"
-                                                className="nav-link btn btn-sm btn-light mx-2 text-start"
-                                            >
-                                                Management Departement
-                                            </Link>
-                                        </li>
-                                    </>
-                                )}
-                                <hr className="mx-3" />
-                                <li className="nav-item text-center d-flex justify-content-center">
-                                    <button
-                                        onClick={() => {
-                                            setTimeout(() => {
-                                                dispatch(logout());
-                                                sessionStorage.clear();
-                                                localStorage.clear()
-                                                router.push('/ui');
-                                            }, 1000);
-                                        }}
-                                        className="nav-link btn btn-danger btn-sm mx-3 text-light"
-                                    >
-                                        Logout
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-
-                    {/* Main Content */}
-                    <main className="col-md-10 col-lg-10 px-4 pt-4">{children}</main>
+                    />
+                    {user.role.name === 'ADMIN' && (
+                        <>
+                            <h4 className="text-center">Admin</h4>
+                            <PanelMenu
+                                model={adminMenuItems}
+                                style={{
+                                    marginTop: '10px',  // Reduced margin at the top
+                                    padding: '0',  // Remove padding
+                                    textDecoration: 'none',
+                                }}
+                            />
+                        </>
+                    )}
+                    <div className="p-d-flex p-jc-center p-mt-3">
+                        <Button
+                            label="Logout"
+                            className="p-button-danger p-button-sm w-100 mt-2"
+                            onClick={() => {
+                                setTimeout(() => {
+                                    dispatch(logout());
+                                    sessionStorage.clear();
+                                    localStorage.clear();
+                                    router.push('/ui');
+                                }, 1000);
+                            }}
+                        />
+                    </div>
                 </div>
+
+                {/* Main Content */}
+                <main
+                    className="container-fluid"
+                    style={{
+                        width: '80%',
+                        flexGrow: 1,
+                        paddingTop: '20px',
+                        paddingLeft: '20px',
+                        paddingRight: '20px',
+                    }}
+                >
+                    {children}
+                </main>
             </div>
         </>
     );

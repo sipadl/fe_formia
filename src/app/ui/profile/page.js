@@ -56,7 +56,7 @@ export default function ProfilePage() {
 
         getDetail();
         decodeData();
-    }, [dispatch, detail, error]);
+    }, [dispatch, error]);
 
     const tabItems = [
         {

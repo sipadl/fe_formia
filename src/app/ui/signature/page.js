@@ -9,6 +9,7 @@ import SignatureCanvas from 'react-signature-canvas';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
+import Image from 'next/image';
 
 const SaveSignature = () => {
     const signatureRef = useRef(null);
@@ -87,7 +88,7 @@ const SaveSignature = () => {
                     <h2 className="text-center mb-4">Tanda Tangan Digital</h2>
                     <div className="border rounded bg-light p-3">
                     {signatureUrl ? 
-                    <img src={signatureUrl} />
+                    <Image src={signatureUrl} alt='...'/>
                     : 
                         <SignatureCanvas
                             ref={signatureRef}
@@ -132,7 +133,7 @@ const SaveSignature = () => {
                     >
                         {signatureUrl && (
                             <div className="text-center">
-                                <img
+                                <Image
                                     src={signatureUrl}
                                     alt="Tanda Tangan"
                                     className="border rounded"

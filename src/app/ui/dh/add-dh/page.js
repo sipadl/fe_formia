@@ -1,12 +1,11 @@
 'use client';
 import { fetchData, postData } from '@/app/utils/network';
-import { Field, Form, Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { FloatLabel } from 'primereact/floatlabel';
 import { InputText } from 'primereact/inputtext';
-import { SelectButton } from 'primereact/selectbutton';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
@@ -16,33 +15,43 @@ export default function Page() {
 
     useEffect(() => {
         const getGrup = async () => {
-            const {data} = await fetchData('/api/main/group/list')
-            const groups = data.map(group => ({
-                label: group.name,  // Tampilkan nama
-                value: group.id     // Gunakan ID sebagai nilai
-            }));
-            setGroup(groups);
-        }
-
+            try {
+                const { data } = await fetchData('/api/main/group/list');
+                const groups = data.map(group => ({
+                    label: group.name,  // Tampilkan nama
+                    value: group.id     // Gunakan ID sebagai nilai
+                }));
+                setGroup(groups);
+            } catch (error) {
+                console.error('Error fetching group data:', error);
+                setGroup([]); // Set default state jika terjadi error
+            }
+        };
+    
         getGrup();
-    }, [setGroup])
+    }, [setGroup]);
+    
 
     return (
         <div>
             <div className="h4">Tambah Departement</div>
             <hr className="mx-4" />
             <Formik
-                initialValues={{
-                    departementName: '',
-                }}
-                onSubmit={async (values) => {
-                    values['groupId'] = selectedGroup;
-                    const submit = await postData('/api/main/departement/add', values);
-                    if(submit.status == 200 ) {    
-                        router.push('/ui/dh/list')
-                    }
-                }}
-            >
+                    initialValues={{
+                        departementName: '', // Nilai default
+                    }}
+                    onSubmit={async (values) => {
+                        values['groupId'] = selectedGroup;
+                        try {
+                            const submit = await postData('/api/main/departement/add', values);
+                            if (submit.status === 200) {
+                                router.push('/ui/dh/list');
+                            }
+                        } catch (error) {
+                            console.error('Error submitting data:', error);
+                        }
+                    }}
+                >
                 {({ handleSubmit, handleReset }) => (
                     <form onSubmit={handleSubmit} onReset={handleReset}>
                         <FloatLabel className='mb-4 mt-4'>
@@ -57,16 +66,16 @@ export default function Page() {
                         <label htmlFor='groupId'>Departement Name</label>
                         </FloatLabel>
                         <FloatLabel className="mb-4">
-                            <Dropdown
-                                value={selectedGroup}
-                                id="groupId"
-                                name="groupId"
-                                required
-                                placeholder="Pilih Group"
-                                options={group}
-                                className="w-100"
-                                onChange={(e) => setSelectedGroup(e.value)}
-                            />
+                        <Dropdown
+                            value={selectedGroup}
+                            id="groupId"
+                            name="groupId"
+                            required
+                            placeholder="Pilih Group"
+                            options={group.length ? group : []} // Pastikan data aman
+                            className="w-100"
+                            onChange={(e) => setSelectedGroup(e.value)}
+                        />
                             <label htmlFor="groupId">Group</label>
                         </FloatLabel>
                         <div className="d-flex justify-content-start mt-4">

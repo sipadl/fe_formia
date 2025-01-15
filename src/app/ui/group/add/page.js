@@ -1,99 +1,89 @@
 'use client';
-import { fetchData, postData } from '@/app/utils/network';
-import { Formik } from 'formik';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
-import { Button } from 'primereact/button';
 
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+import { Field, Formik } from 'formik';
+import { useEffect, useState } from 'react';
+
+const Button = dynamic(() => import('primereact/button'), { ssr: false });
+const Dropdown = dynamic(() => import('primereact/dropdown'), { ssr: false });
+const FloatLabel = dynamic(() => import('primereact/floatlabel'), { ssr: false });
+const InputText = dynamic(() => import('primereact/inputtext'), { ssr: false });
 
 export default function Page() {
     const router = useRouter();
-    const [departement, setDepartement] = useState([]);
-    const [listUser, setListUser] = useState([]);
+    const [group, setGroup] = useState([]);
+    const [selectedGroup, setSelectedGroup] = useState('');
 
-    // useEffect(() => {
-    //     const getDepartement = async () => {
-    //         const datadepartement = await fetchData('/api/main/departement/list');
-    //         setDepartement(datadepartement.data);
-    //     };
+    useEffect(() => {
+        const getGrup = async () => {
+            try {
+                const { data } = await fetchData('/api/main/group/list');
+                const groups = data.map(group => ({
+                    label: group.name,
+                    value: group.id
+                }));
+                setGroup(groups);
+            } catch (error) {
+                console.error('Error fetching group data:', error);
+                setGroup([]);
+            }
+        };
 
-    //     const getUser = async () => {
-    //         const dataUser = await fetchData('/api/user/get');
-    //         setListUser(dataUser.data);
-    //     };
-
-    //     getDepartement();
-    //     getUser();
-    // }, []);
+        getGrup();
+    }, [setGroup]);
 
     return (
         <div>
-            <div className="h4 mb-3">Tambah Group</div>
+            <div className="h4">Tambah Departement</div>
+            <hr className="mx-4" />
             <Formik
                 initialValues={{
-                    name: '',
-                    position: '',
-                }}
-                validate={(values) => {
-                    const errors = {};
-                    if (!values.name) errors.name = 'Nama is required';
-                    if (!values.position) errors.position = 'Position is required';
-                    return errors;
+                    departementName: '',
                 }}
                 onSubmit={async (values) => {
+                    values['groupId'] = selectedGroup;
                     try {
-                        const submit = await postData('/api/main/group/new', values);
-                        router.push('/ui/group/list');
+                        const submit = await postData('/api/main/departement/add', values);
+                        if (submit.status === 200) {
+                            router.push('/ui/dh/list');
+                        }
                     } catch (error) {
-                        console.error('Submission error:', error);
+                        console.error('Error submitting data:', error);
                     }
                 }}
             >
-                {({ handleSubmit, setFieldValue, values, errors, touched }) => (
-                    <form onSubmit={handleSubmit}>
-                        {/* Nama Field */}
-                        <div className="form-group mb-4">
-                            <label className="mb-2">Nama</label>
-                            <InputText
-                                className={`w-100 ${errors.name && touched.name ? 'p-invalid' : ''}`}
-                                name="name"
-                                placeholder="Masukkan Nama"
-                                value={values.name}
-                                onChange={(e) => setFieldValue('name', e.target.value)}
+                {({ handleSubmit, handleReset }) => (
+                    <form onSubmit={handleSubmit} onReset={handleReset}>
+                        <FloatLabel className='mb-4 mt-4'>
+                            <Field
+                                as={InputText}
+                                id="departementName"
+                                placeholder="Departement Name"
+                                name="departementName"
+                                required
+                                className="w-100"
                             />
-                            {errors.name && touched.name && (
-                                <small className="p-error">{errors.name}</small>
-                            )}
-                        </div>
-                        {/* Posisi Dropdown */}
-                        <div className="form-group mb-4">
-                            <label className="mb-2">Posisi</label>
+                            <label htmlFor='groupId'>Departement Name</label>
+                        </FloatLabel>
+                        <FloatLabel className="mb-4">
                             <Dropdown
-                                className={`w-100 ${errors.position && touched.position ? 'p-invalid' : ''}`}
-                                name="position"
-                                options={[
-                                    { label: 'IT', value: '1' },
-                                    { label: 'Risk', value: '2' },
-                                ]}
-                                placeholder="Pilih Posisi"
-                                value={values.position}
-                                onChange={(e) => setFieldValue('position', e.value)}
+                                value={selectedGroup}
+                                id="groupId"
+                                name="groupId"
+                                required
+                                placeholder="Pilih Group"
+                                options={group.length ? group : []}
+                                className="w-100"
+                                onChange={(e) => setSelectedGroup(e.value)}
                             />
-                            {errors.position && touched.position && (
-                                <small className="p-error">{errors.position}</small>
-                            )}
-                        </div>
-
-                        {/* Buttons */}
-                        <div className="d-flex justify-content-end">
-                            <Button
-                                type="reset"
-                                label="Kembali"
-                                className="p-button-outlined p-button-secondary me-2"
-                            />
-                            <Button type="submit" label="Tambah" className="p-button-dark" />
+                            <label htmlFor="groupId">Group</label>
+                        </FloatLabel>
+                        <div className="d-flex justify-content-start mt-4">
+                            <Button severity='primary' label='Submit' type='submit'></Button>
+                            <Button severity='secondary' label='Cancel' className='mx-2' type='reset' onClick={() => {
+                                router.push('/ui/dh/list')
+                            }}></Button>
                         </div>
                     </form>
                 )}
