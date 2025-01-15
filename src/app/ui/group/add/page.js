@@ -14,24 +14,32 @@ export default function Page() {
     const router = useRouter();
     const [group, setGroup] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState('');
+    const [loading, setLoading] = useState(true);  // Add a loading state
 
     useEffect(() => {
         const getGrup = async () => {
             try {
-                const { data } = await fetchData('/api/main/group/list');
+                const response = await fetch('/api/main/group/list');
+                const data = await response.json();
                 const groups = data.map(group => ({
                     label: group.name,
                     value: group.id
                 }));
                 setGroup(groups);
+                setLoading(false); // Set loading to false after data is fetched
             } catch (error) {
                 console.error('Error fetching group data:', error);
                 setGroup([]);
+                setLoading(false);
             }
         };
-
         getGrup();
-    }, [setGroup]);
+    }, []);
+
+    // If data is loading, return a loading state (or a fallback component)
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
@@ -44,7 +52,14 @@ export default function Page() {
                 onSubmit={async (values) => {
                     values['groupId'] = selectedGroup;
                     try {
-                        const submit = await postData('/api/main/departement/add', values);
+                        const response = await fetch('/api/main/departement/add', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(values),
+                        });
+                        const submit = await response.json();
                         if (submit.status === 200) {
                             router.push('/ui/dh/list');
                         }

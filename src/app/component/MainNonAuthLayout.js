@@ -19,6 +19,8 @@ export default function MainNonAuthLayout() {
 
     const [error, setError] = useState(null);
     const [isToastVisible, setToastVisible] = useState(false);
+    const [isSubmit, setIsSubmit] = useState(false);
+    const [dataSubmit, setDataSubmit] = useState({});
 
     const handleError = (message) => {
         setError(message);  // Trigger the error
@@ -31,7 +33,11 @@ export default function MainNonAuthLayout() {
             setToastVisible(false);  // Hide the toast
           // Clean up the timeout when the component unmounts or error changes
       }
-    }, [error, isToastVisible])
+      if(isSubmit){
+        sessionStorage.setItem('_token', dataSubmit.token)
+        sessionStorage.setItem('_cookie', btoa(JSON.stringify(dataSubmit)))
+      }
+    }, [error, isToastVisible, isSubmit])
 
     return (
         <> 
@@ -66,8 +72,8 @@ export default function MainNonAuthLayout() {
                                 setError('');
                                 const response = await postDataWithoutAuth('/api/auth/login', values);
                                 if(response.status === 200 ){
-                                    sessionStorage.setItem('_token', response.data.token)
-                                    sessionStorage.setItem('_cookie', btoa(JSON.stringify(response.data)))
+                                    setIsSubmit(true)
+                                    setDataSubmit(response.data)
                                     dispatch(login({detail:response.data}))
                                     dispatch(detail(response.data))
                                     setSubmitting(false);
