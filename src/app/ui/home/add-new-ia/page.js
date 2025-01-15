@@ -8,7 +8,7 @@ import { Button } from "primereact/button"
 import { Editor } from "primereact/editor"
 import { useEffect, useState } from "react"
 
-export default function page() {
+export default function Page() {
 
     const [changesArea, setChangesArea] = useState([]);
     const [groupHead, setgroupHead] = useState([]);
@@ -409,9 +409,9 @@ export default function page() {
                         >
                             <option value={false}>Pilih salah satu</option>
                             {groupHead.map((val, key) => (
-                                <option key={key} value={val.id}>{val.user?.namaLengkap} - {val.departement?.departementName}</option>
+                                <option key={key} value={val.id}>{val.namaLengkap} - {val.departement.group?.name}</option>
                             ))}
-                        </Field>
+                        </Field> 
                     </div>
                 </div>
                 <div className="d-flex justify-content-end mt-4">

@@ -67,42 +67,6 @@ export default function Page() {
                                 <small className="p-error">{errors.name}</small>
                             )}
                         </div>
-                        {/* Departement Dropdown */}
-                        {/* <div className="form-group mb-4">
-                            <label className="mb-2">Departement</label>
-                            <Dropdown
-                                className={`w-100 ${errors.departement && touched.departement ? 'p-invalid' : ''}`}
-                                name="departement"
-                                options={departement}
-                                optionLabel="departementName"
-                                optionValue="id"
-                                placeholder="Pilih Departement"
-                                value={values.departement}
-                                onChange={(e) => setFieldValue('departement', e.value)}
-                            />
-                            {errors.departement && touched.departement && (
-                                <small className="p-error">{errors.departement}</small>
-                            )}
-                        </div> */}
-
-                        {/* Akun Terkait Dropdown */}
-                        {/* <div className="form-group mb-4">
-                            <label className="mb-2">Akun Terkait</label>
-                            <Dropdown
-                                className={`w-100 ${errors.akunTerkait && touched.akunTerkait ? 'p-invalid' : ''}`}
-                                name="akunTerkait"
-                                options={listUser}
-                                optionLabel="namaLengkap"
-                                optionValue="id"
-                                placeholder="Pilih Akun Terkait"
-                                value={values.akunTerkait}
-                                onChange={(e) => setFieldValue('akunTerkait', e.value)}
-                            />
-                            {errors.akunTerkait && touched.akunTerkait && (
-                                <small className="p-error">{errors.akunTerkait}</small>
-                            )}
-                        </div> */}
-
                         {/* Posisi Dropdown */}
                         <div className="form-group mb-4">
                             <label className="mb-2">Posisi</label>

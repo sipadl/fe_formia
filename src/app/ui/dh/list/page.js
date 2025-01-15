@@ -9,7 +9,7 @@ import { dateConverter } from '@/app/utils/ConverterDate';
 import { Button } from 'primereact/button';
 
 
-export default function page() {
+export default function Page() {
 
     const [data, setData] = useState([])
     
@@ -18,9 +18,8 @@ export default function page() {
             const dataUser = await fetchData('/api/main/departement/list')
             setData(dataUser.data)
         }
-
         getListUser();
-    }, []);
+    }, [setData]);
     
   return (
     <div>

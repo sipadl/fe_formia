@@ -43,7 +43,7 @@ const AppWrapper = ({ children , meta}) => {
         }
     
 
-    }, [dispatch]);
+    }, [dispatch, router]);
 
     return (
         <>

@@ -25,9 +25,7 @@ export default function Page() {
         }
 
         getGrup();
-    }, [])
-
-
+    }, [setGroup])
 
     return (
         <div>
@@ -40,7 +38,9 @@ export default function Page() {
                 onSubmit={async (values) => {
                     values['groupId'] = selectedGroup;
                     const submit = await postData('/api/main/departement/add', values);
-                    router.push('/ui/dh/list')
+                    if(submit.status == 200 ) {    
+                        router.push('/ui/dh/list')
+                    }
                 }}
             >
                 {({ handleSubmit, handleReset }) => (

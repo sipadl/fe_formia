@@ -9,7 +9,7 @@ import { dateConverter } from '@/app/utils/ConverterDate';
 import { Button } from 'primereact/button';
 
 
-export default function page() {
+export default function Page() {
 
     const [data, setData] = useState([])
     
