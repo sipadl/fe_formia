@@ -29,7 +29,6 @@ export default function Page() {
         const fetchDataAsync = async () => {
             try {
                 const response = await fetchData('/api/ia/list?size=300&sort=id,createdAt');
-                // Format data sesuai kebutuhan
                 const formattedData = response.data.content.map((item, index) => ({
                     key: index + 1,
                     id: item.id,
@@ -51,13 +50,14 @@ export default function Page() {
         if (_token) {
             if (!session) {
                 setSession(true);
-            }
-            if (rows.length === 0) {
-                fetchDataAsync();
+            } else {
+                const hasil = fetchDataAsync();
+                console.log(hasil)
             }
         }
     }, [session]);
 
+    console.log(session);
 
     const onGlobalFilterChange = (e) => {
         const value = e.target.value;
