@@ -29,6 +29,7 @@ const AppWrapper = ({ children, meta }) => {
   useEffect(() => {
     const token = sessionStorage.getItem('_token'); // Check token in sessionStorage
     if (token && validateToken(token)) {
+      console.log('disini')
       dispatch(login({ token })); // Set state isAuthenticated = true
     } else {
       dispatch(logout()); // Set state isAuthenticated = false

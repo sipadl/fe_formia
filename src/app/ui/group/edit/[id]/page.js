@@ -1,104 +1,132 @@
 'use client';
-import { fetchData, postData } from '@/app/utils/network';
-import { Field, Form, Formik } from 'formik';
+
 import { useRouter } from 'next/navigation';
+import { Field, Formik } from 'formik';
 import { useEffect, useState } from 'react';
+import { Dropdown } from 'primereact/dropdown';
+import { Button } from 'primereact/button';
+import { FloatLabel } from 'primereact/floatlabel';
+import { InputText } from 'primereact/inputtext';
+import { fetchData, postData } from '@/app/utils/network';
 
 export default function Page() {
     const router = useRouter();
+    const [group, setGroup] = useState([]);
+    const [setFieldValue, setFieldValues] = useState([]);
+    const [loading, setLoading] = useState(true);
     
-    const id = window.location.pathname.split('/').reverse()[0];
-    const [data, setData] = useState({
-        name: '',
-        departement: '',
-        position: '', // Default value for position
-    });
+    const id = typeof window !== 'undefined' ? window.location.pathname.split('/').reverse()[0] : null;
 
     useEffect(() => {
-        const getDetails = async () => {
+        const fetchInitialData = async () => {
             try {
-                const details = await fetchData(`/api/main/gh/${id}`);
-                setData({name: details.data.name, departement:details.data.departement, position:details.data.position});
+                // Fetch user options
+                const response = await fetchData('/api/user/get');
+                const groups = response.data.map((group) => ({
+                    label: group.namaLengkap,
+                    value: group.id,
+                }));
+                setGroup(groups);
+
+                // Fetch group details for pre-filling
+                const groupDetails = await fetchData(`/api/main/group/detail/${id}`);
+                console.log(groupDetails)
+                if (groupDetails?.data) {
+                    const { name, position, userId } = groupDetails.data;
+
+                    // Use setFieldValue to pre-fill fields in Formik
+                    setFieldValues({
+                        name,
+                        position: position || '',
+                        userId: userId || '',
+                    });
+                }
+
+                setLoading(false);
             } catch (error) {
-                console.error('Error fetching details:', error);
+                console.error('Error fetching data:', error);
+                setGroup([]);
+                setLoading(false);
             }
         };
 
-        getDetails();
+        fetchInitialData();
     }, [id]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
-            <div className="h4">Tambah Group Head</div>
+            <div className="h4">Ubah Group</div>
             <hr className="mx-4" />
             <Formik
-            enableReinitialize
-            initialValues={{
-                name: data.name || '',
-                departement: data.departement || '',
-                position: data.position || '', // Pastikan field yang lain juga disesuaikan
-            }}
-            validate={(values) => {
-                const errors = {};
-                if (!values.name) errors.name = 'Nama Group Head is required';
-                if (!values.departement) errors.departement = 'Departement is required';
-                if (!values.position) errors.position = 'Position is required';
-                return errors;
-            }}
-            onSubmit={async (values) => {
-                try {
-                    console.log("disini", values)
-                    await postData(`/api/main/gh/${id}/update`, values);
-                    router.push('/ui/gh/list');
-                } catch (error) {
-                    console.error('Error submitting form:', error);
-                }
-            }}
-        >
-            {({ handleSubmit, handleReset }) => (
-                <form onSubmit={handleSubmit} onReset={handleReset}>
-                    <div className="form-group row mb-3">
-                        <label className="label-form col-md-3">Nama</label>
-                        <div className="col-md-9">
+                initialValues={setFieldValue}
+                onSubmit={async (values) => {
+                    const response = await postData(`/api/main/group/edit/${id}`, values);
+                    if (response.status === 200) {
+                        router.push('/ui/group/list');
+                    }
+                }}
+            >
+                {({ handleSubmit, handleReset, setFieldValue, values }) => (
+                    <form onSubmit={handleSubmit} onReset={handleReset}>
+                        <FloatLabel className="mb-4 mt-4">
                             <Field
-                                className="form-control"
+                                as={InputText}
+                                id="name"
+                                placeholder="Group Name"
                                 name="name"
-                                placeholder="Masukan Nama"
+                                required
+                                className="w-100"
+                            />
+                            <label htmlFor="name">Group Name</label>
+                        </FloatLabel>
+                        <FloatLabel className="mb-4">
+                            <Dropdown
+                                value={values.userId}
+                                id="userId"
+                                name="userId"
+                                placeholder="Pilih Satu"
+                                options={group}
+                                className="w-100"
+                                onChange={(e) => setFieldValue('userId', e.value)}
+                                required
+                            />
+                            <label htmlFor="userId">User</label>
+                        </FloatLabel>
+                        <FloatLabel className="mb-4">
+                            <Dropdown
+                                value={values.position}
+                                id="position"
+                                name="position"
+                                placeholder="Pilih Satu"
+                                options={[
+                                    { label: 'IT', value: 1 },
+                                    { label: 'Risk / Compliance', value: 2 },
+                                ]}
+                                className="w-100"
+                                onChange={(e) => setFieldValue('position', e.value)}
+                                required
+                            />
+                            <label htmlFor="position">Position</label>
+                        </FloatLabel>
+                        <div className="d-flex justify-content-start mt-4">
+                            <Button severity="primary" label="Submit" type="submit" />
+                            <Button
+                                severity="secondary"
+                                label="Cancel"
+                                className="mx-2"
+                                type="reset"
+                                onClick={() => {
+                                    router.push('/ui/group/list');
+                                }}
                             />
                         </div>
-                    </div>
-                    <div className="form-group row mb-3">
-                        <label className="label-form col-md-3">Departement</label>
-                        <div className="col-md-9">
-                            <Field
-                                className="form-control"
-                                name="departement"
-                                placeholder="Masukan Departement"
-                            />
-                        </div>
-                    </div>
-                    <div className="form-group row mb-3">
-                        <label className="label-form col-md-3">Posisi</label>
-                        <div className="col-md-9">
-                            <Field as="select" className="form-control" name="position">
-                                <option value="">Pilih Posisi</option>
-                                <option value="1">IT</option>
-                                <option value="2">Risk</option>
-                            </Field>
-                        </div>
-                    </div>
-                    <div className="d-flex justify-content-end">
-                        <button className="btn btn-sm btn-light" type="reset">
-                            Kembali
-                        </button>
-                        <button className="btn btn-sm btn-dark" type="submit">
-                            Tambah
-                        </button>
-                    </div>
-                </form>
-            )}
-        </Formik>
-
+                    </form>
+                )}
+            </Formik>
         </div>
     );
 }

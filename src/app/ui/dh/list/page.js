@@ -30,7 +30,7 @@ export default function Page() {
                     <div className='col-md-6  mx-0 d-flex justify-content-end mb-4'>
                         <div>
                             <Link
-                                href={'/ui/dh/add-dh'}
+                                href={'/ui/dh/add'}
                                 >
                                     <Button severity='primary' label='+ Departement'></Button>
                             </Link>

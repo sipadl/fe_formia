@@ -10,7 +10,6 @@ import { InputText } from 'primereact/inputtext';
 import { fetchData, postData } from '@/app/utils/network';
 
 export default function Page() {
-    const id = window.location.pathname.split('/').reverse()[0];
     const router = useRouter();
     const [group, setGroup] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState('');

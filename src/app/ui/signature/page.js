@@ -88,7 +88,7 @@ const SaveSignature = () => {
                     <h2 className="text-center mb-4">Tanda Tangan Digital</h2>
                     <div className="border rounded bg-light p-3">
                     {signatureUrl ? 
-                    <Image src={signatureUrl} alt='...'/>
+                    <Image width={500} height={200}src={signatureUrl} alt='...'/>
                     : 
                         <SignatureCanvas
                             ref={signatureRef}

@@ -9,21 +9,42 @@ export default function Page() {
     const id = router[4] || 1;
     const [detail, setDetail] = useState({});
     const [groupHead, setGroupHead] = useState([]);
+    const [changes, setChanges] = useState([]);
+
+    const mappingChangesArea = (values) => {
+        const hasil = [];
+        const newVal = values ? JSON.parse(values) : [];
+        changes.map((val, index) => {
+            for (let i = 0; i < newVal.length; i++) {
+                if(newVal[i] == val.id){
+                    hasil.push(`${val.name}, `)
+                }      
+            }
+        })
+        return hasil
+    }
+    
+
     useEffect(() => {
         // setTimeout(() => {
             const getData = async () => {
                 const res = await fetchData(`/api/ia/detail/${id}`)
                 setDetail(res.data)
+                if(res.data){
+                    const gh = await fetchData(`/api/main/signature/list/redmine/${res.data.redmineNo}`)
+                    setGroupHead(gh.data)
+                }
             }
-            const getDataGh = async () => {
-                const res = await fetchData(`/api/main/gh/list/signature/${id}`)
-                console.log(res);
-                setGroupHead(res.data)
+
+            const changesArea = async () => {
+                const response = await fetchData('/api/main/changesArea');
+                setChanges(response.data)
             }
-            getDataGh();
-            getData();
+                getData();
+                changesArea();
         // }, 3000);
     },[id])
+
     return (
         <div>
             <h4 className='text-center text-uppercase'>Changes Impact Analisis</h4>
@@ -52,7 +73,7 @@ export default function Page() {
                         title: 'Changes Area',
                         name: 'changes',
                         tipe: 0,
-                        output: detail ? detail.changes  : ''
+                        output: detail ? mappingChangesArea(detail.changes)  : ''
                     }, {
                         title: 'Existing Flow',
                         name: 'existingFlow',
@@ -107,7 +128,7 @@ export default function Page() {
                         title: 'Downtime message',
                         name: 'downTimeMsg',
                         tipe: 0,
-                        output: detail ? detail.downTimeMsg : detail?.downTimeMsg != '' ? detail.downTimeMsg : '0'
+                        output: detail ? detail?.downTimeMsg : detail?.downTimeMsg != '' ? detail?.downTimeMsg : '0'
                     }
                 ]}/>
                 <SignaturePad values={groupHead} redmine={id} />

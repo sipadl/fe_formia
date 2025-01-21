@@ -34,11 +34,15 @@ export default function MainNonAuthLayout() {
           // Clean up the timeout when the component unmounts or error changes
       }
       if(isSubmit){
+        localStorage.setItem('_token', dataSubmit.token)
+        localStorage.setItem('_cookie', btoa(JSON.stringify(dataSubmit)))
         sessionStorage.setItem('_token', dataSubmit.token)
         sessionStorage.setItem('_cookie', btoa(JSON.stringify(dataSubmit)))
       }
     }, [error, isToastVisible, isSubmit])
 
+
+    console.log(isSubmit);
     return (
         <> 
         {error && isToastVisible && <ToastPopup message={error} severity="error" />}
@@ -69,14 +73,13 @@ export default function MainNonAuthLayout() {
                     onSubmit={(values, {setSubmitting}) => {
                         setSubmitting(true);
                         setTimeout( async () => {
-                                setError('');
                                 const response = await postDataWithoutAuth('/api/auth/login', values);
-                                if(response.status === 200 ){
+                                if(response.status == 200 ){
+                                    console.log(values)
                                     setIsSubmit(true)
                                     setDataSubmit(response.data)
                                     dispatch(login({detail:response.data}))
                                     dispatch(detail(response.data))
-                                    setSubmitting(false);
                                     router.push('/ui/home');
                                 } else {
                                     setError(response.response.data)

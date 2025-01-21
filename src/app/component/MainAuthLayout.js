@@ -97,8 +97,6 @@ export default function MainAuthLayout({ children, metadata }) {
                             onClick={() => {
                                 setTimeout(() => {
                                     dispatch(logout());
-                                    sessionStorage.clear();
-                                    localStorage.clear();
                                     router.push('/ui');
                                 }, 1000);
                             }}

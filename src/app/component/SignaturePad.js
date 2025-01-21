@@ -142,6 +142,8 @@ export default function SignaturePad({
         setModalShow(false);
     };
 
+    console.log(values)
+
     return (
         <div>
             <div className="row mb-4">
@@ -157,10 +159,11 @@ export default function SignaturePad({
                 </div>
                 <hr/> {
                     values.map((val) => (
+                        (console.log(val)),
                         val.position == 1
                             ? <React.Fragment key={val.id}>
                                 <div className="col-md-4 col-xs-12">
-                                    <div className="header-notes-inner">{(val.userDetail.departement.departementName).toUpperCase()}</div>
+                                    <div className="header-notes-inner">{(val.groupHead.user.departement.departementName).toUpperCase()}</div>
                                 </div>
                                 <div className="col-md-4 col-xs-12">
                                     <div className="header-notes-inner mb-2">

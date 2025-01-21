@@ -17,20 +17,20 @@ export default function Page() {
     useEffect(() => {
         const getChanges = async () => {
             const response = await fetchData('/api/main/changesArea');
-            const ghRes = await fetchData('/api/main/gh/list');
+            const ghRes = await fetchData('/api/main/group/list');
             setgroupHead(ghRes.data);
             setChangesArea(response.data);
         }
 
         getChanges();
-    }, [setChangesArea, setgroupHead]);
+    }, []);
 
     if(groupHead && changesArea) {
     return (
         <div>
             <h4 className='text-center text-uppercase'>Changes Impact Analisis</h4>
             <hr />
-            <div className="mb-4">
+            <div className="mb-4" style={{marginBottom: '50px'}}>
                 <Formik
                 initialValues={{
                     title: '',
@@ -409,7 +409,7 @@ export default function Page() {
                         >
                             <option value={false}>Pilih salah satu</option>
                             {groupHead.map((val, key) => (
-                                <option key={key} value={val.id}>{val.namaLengkap} - {val.departement.group?.name}</option>
+                                <option key={key} value={val.id}>{val.name}</option>
                             ))}
                         </Field> 
                     </div>

@@ -58,10 +58,16 @@ export default function Page() {
                             body={(rowData, options) => options.rowIndex + 1}
                         ></Column>
                         <Column
+                            field="Group"
+                            sortable
+                            header="Group"
+                            body={(val) => val.name}
+                        ></Column>
+                        <Column
                             field="name"
                             sortable
                             header="Nama"
-                            body={(val) => val.name}
+                            body={(val) => val?.user?.namaLengkap}
                         ></Column>
 
                         <Column
